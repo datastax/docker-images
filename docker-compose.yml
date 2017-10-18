@@ -1,0 +1,13 @@
+version: '2'
+services:
+  seed_node:
+    image: "datastax/dse-server"
+    environment:
+      - DS_LICENSE=accept
+  node:
+    image: "datastax/dse-server"
+    environment:
+      - DS_LICENSE=accept
+      - SEEDS=seed_node
+    links:
+      - seed_node

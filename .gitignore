@@ -1,0 +1,10 @@
+.DS_Store
+.wgetrc
+*.tar.gz
+tmp/
+volumes/
+.idea
+.gradle
+*~
+gradle.properties
+build/

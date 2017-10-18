@@ -1,0 +1,473 @@
+Enterprise Terms
+
+ Last Updated Date: July 17, 2017
+
+These Enterprise Terms are part of a legal agreement (the “Agreement”)
+between the person or entity agreeing to these terms (“Customer”) and 
+DataStax, Inc., a Delaware corporation, and includes these Enterprise 
+Terms, any terms expressly incorporated herein by reference, and any 
+terms in a fully executed ordering document that incorporates these 
+DataStax Enterprise Terms (an “Order Schedule”). This Agreement is 
+effective as of the date the Order Schedule is fully executed (the 
+“Effective Date”).
+
+Customer may obtain Software, Support and/or other Services
+(collectively “Products”) from DataStax subject to the terms of this 
+Agreement. “Software” means software, data and other and materials made 
+available to Customer by DataStax as specified in the applicable Order 
+Schedule, including error corrections, modifications and updates to 
+such items, and including the Documentation. “Software” does not 
+include, and DataStax does not warrant or support, software obtained 
+from any source other than DataStax. “Documentation” means the 
+materials available at docs.datastax.com, as amended from time to time. 
+“Support” means the services described in the DataStax Support Policy 
+available at www.datastax.com/support-policy, as amended from time to 
+time. “Services” means training, consulting or other services (other 
+than Support) specified in an Order Schedule.
+
+1. Subscriptions
+
+1.1. Subscription. DataStax provides Support for and licensing of its
+Software as a combined subscription (a “Subscription”) for the time 
+period specified in Customer’s Order Schedule (the “Subscription 
+Period”).
+
+1.2. Subscription License. If Customer has purchased a Subscription, 
+then subject to the Agreement, DataStax grants Customer a worldwide, 
+nonexclusive, nontransferable, nonsublicensable, terminable license to 
+use the Software during the Subscription Period (a “Subscription 
+License”) subject to any license parameters specified in the applicable 
+Order Schedule.
+
+1.3. Support. If Customer has purchased a Subscription, DataStax will 
+provide Customer with Support of the Software during the Subscription 
+Period. If Customer requires a purchase order to complete its purchase, 
+then Support will not be provided until Customer delivers a conforming 
+purchase order.
+
+1.4. Limited No-Fee License. DataStax grants Customer a royalty-free, 
+worldwide, nonexclusive, nontransferable, nonsublicensable, 
+time-limited, and, terminable license to use the Software, solely for 
+non-production purposes (a “No-Fee License”), without the right to 
+Support.
+
+1.5. Limited Use to Store Performance Metrics. Customers with a valid 
+Subscription that includes the right to use the Software’s performance 
+monitoring tools may use the Software to store the metrics from those 
+tools in a separate, dedicated storage cluster without payment of any 
+additional fee, but only if the storage cluster is used solely for 
+storing those metrics. Use of the storage cluster for any other purpose 
+requires a separate license.
+
+1.6. Requirement for Uniform Clusters. All Nodes in each Cluster must 
+be uniformly licensed to use the same Subscription. For example, if a 
+Cluster contains 5 Nodes, all 5 Nodes within that Cluster must be 
+either DSE Standard, or all 5 Nodes must be DSE Max. Mixing different 
+Subscriptions within a Cluster is not permitted. “Cluster” means a 
+collection of Nodes running the Software which communicate with one 
+another via Gossip, and “Gossip” means the mechanism within the 
+Software enabling related Nodes to communicate with one another.
+
+
+2. Consulting Services
+
+DataStax provides all Services according to the Services Terms at 
+www.datastax.com/service-terms, as updated or amended from time to time.
+
+3. Payment
+3.1. Fees. Customer will pay all fees and any applicable Taxes (the 
+“Fees”) as specified in the Order Schedule. If the due date is not 
+otherwise specified in the Order Schedule, all Fees are due 30 days 
+from the invoice date. All Subscription Fees are non-refundable. Unless 
+otherwise specified in the Order Schedule, all Fees are in U.S. dollars 
+and all dates are based on the location of the choice of law.
+
+3.2. Increased Volume of Use. For increased use of the Software other 
+than Authorized Bursting Use (as defined below), Customer may increase 
+its use during the Subscription Period beyond the scope specified in 
+the Order Schedule, provided that Customer promptly notifies DataStax 
+of the additional use and pays the applicable Fees. The Order Schedule 
+will specify the scope of the Subscription purchased by Customer, 
+including as follows: (1) production or non-production use; (2) number 
+of Nodes and Cores; and/or (3) other license parameters set forth in 
+the applicable Order Schedule. “Node” means a Java Virtual Machine (a 
+platform-independent execution environment that converts Java bytecode 
+into machine language and executes it) that runs an instance of the 
+Software. A “Core” means an independent, physical processing unit on a 
+CPU responsible for executing programs. Unless otherwise specified in 
+the Order Schedule, each Node counts as 16 Cores and may run on a 
+maximum of 16 Cores. All Fees for increased use are due 30 days from 
+the invoice date.
+
+3.3 Bursting Use. Customer may, upon submission of notice to 
+customercare@datastax.com, temporarily increase its use of the Software 
+by 20% above the volume of use in its then-current Subscription for not 
+more than two months for each 12 month period from the date of the 
+notice (“Authorized Bursting Use”). If Customer increases its use 
+beyond Authorized Bursting Use, it must notify DataStax and pay the 
+applicable Fees.
+
+3.4. Taxes. Customer is responsible for any duties, customs fees, or 
+taxes (other than DataStax’ income tax) associated with the purchase of 
+the Products provided by DataStax, (including any related penalties or 
+interest) (“Taxes”), and shall pay the listed fees without deduction 
+for Taxes. If Customer is required by applicable law to withhold any 
+amount from any payments specified in the Order Schedule, then Customer 
+will pay DataStax the listed fees as if no withholding were required, 
+and shall remit the withholding to the appropriate governmental 
+authorities on behalf of DataStax, with a copy of the tax receipt or 
+certificate forwarded to DataStax.
+
+3.5. Inspection. During the term of this Agreement and for one year 
+thereafter, but no more than once in a 12 month period and on no less 
+than 30 days notice, Customer shall permit DataStax or its designated 
+agent to inspect Customer’s facilities and records to verify Customer’s 
+compliance with the Agreement. DataStax at its option may require that 
+an executive officer of Customer certify in writing to Customer’s 
+compliance with this Agreement.
+
+3.6. Delinquencies. Any late payments will accrue late charges at the 
+rate of 1.5% of the outstanding balance per month, or the maximum rate 
+permitted by law, whichever is lower.
+
+4. Restrictions
+
+All rights in the Software not expressly granted under this Agreement
+are reserved to DataStax or its licensors. Without limiting the 
+foregoing (except to the extent such restriction is expressly 
+prohibited by applicable law), Customer shall not, and shall not permit 
+others under its control to: (1) copy, modify, create a derivative work 
+of, reverse engineer, decompile, translate, disassemble, or otherwise 
+attempt to extract the source code of the Software or any component 
+thereof; (2) assign, sublicense, transfer, lease, rent or otherwise 
+distribute or make available the Software to any third party; (3) use 
+the Software for High Risk Activities or otherwise contrary to the 
+Documentation; (4) use the Software to create, deliver training on, 
+improve (directly or indirectly) or offer a substantially similar 
+product or service; or (5) use the included ODBC driver to connect to 
+other distributions of the components of the Software. “High Risk 
+Activities” means uses such as the operation of nuclear facilities, air 
+traffic control, or life support systems, where the use or failure of 
+the Software could lead to death, personal injury, or environmental 
+damage. The Software includes the third party software and material 
+specified at www.datastax.com/thirdpartysoftware (“Third Party 
+Software”).
+
+5. Proprietary Rights
+
+5.1. Software. The Software is licensed, not sold. As between the 
+parties, all intellectual property rights in the Software shall remain 
+with DataStax or its licensors.
+
+5.2. Federal Agency Users. The Software was developed solely at private 
+expense and is commercial computer software and related documentation 
+within the meaning of the applicable Federal Acquisition Regulation and 
+agency supplements thereto.
+
+5.3. Feedback. If Customer provides any suggestions or feedback 
+regarding the Products, then DataStax may use that information without 
+obligation to Customer, and Customer hereby irrevocably assigns to 
+DataStax all right, title, and interest in that feedback or those 
+suggestions.
+
+6. Term & Termination
+
+6.1. Agreement Term. This Agreement will begin on the Effective Date 
+and continue until the later of the following: (1) the expiration or 
+completion of all Subscription Periods or Service commitments under any 
+open Order Schedules; or (2) the date on which the Agreement is 
+terminated as specified herein.
+
+6.2. License Term. Subject to Customer’s payment of Fees, the 
+Subscription License will continue for the Subscription Period, unless 
+terminated earlier as set forth in this Agreement. A No-Fee License 
+shall continue until terminated, in DataStax’ sole discretion, on 
+notice to Customer.
+
+6.3. Termination for Breach. Either party may terminate this Agreement 
+if the other party breaches any material term of this Agreement and 
+fails to cure that breach within 30 days after receipt of written 
+notice.
+
+6.4. Effect of Termination. If the Agreement expires or is terminated, 
+then: (1) the rights granted by one party to the other will immediately 
+cease; (2) all Fees owed by Customer are immediately due upon receipt 
+of the final invoice; (3) Customer will delete the Software; and (4) 
+upon request, each party will use commercially reasonable efforts to 
+return or destroy all Confidential Information of the other party.
+
+7. Confidentiality
+
+7.1. Confidentiality Obligation. During the term of this Agreement, 
+both parties agree that: (1) Confidential Information will be used only 
+in accordance with the terms and conditions of this Agreement; (2) each 
+will use the same degree of care it uses to protect its own 
+confidential information, but in no event less than reasonable care; 
+and (3) the Confidential Information may be disclosed only to 
+employees, agents and contractors with a need to know, and to its 
+auditors and legal counsel, in each case, who are under a written 
+obligation to keep such information confidential using standards of 
+confidentiality not less restrictive than those required by this 
+Agreement. DataStax may use Customer’s data for internal business 
+purposes only, including providing Support, and improving, testing and 
+providing the Products. “Confidential Information” means any 
+information designated as confidential orally or in writing by either 
+party, or any information that the receiving party knows, or has reason 
+to know, is confidential or proprietary based upon its treatment by the 
+disclosing party.
+
+7.2. Exclusions. This Agreement imposes no obligation with respect to 
+information that: (1) is a part of or enters into the public domain; 
+(2) was already in the recipient’s possession prior to the date of 
+disclosure other than by breach of this Agreement; (3) is rightfully 
+received from a third party without any duty of confidentiality; or (4) 
+is independently developed without reference to the Confidential 
+Information of the disclosing party.
+
+7.3. Publicity. Customer may state publicly that it is a user of the 
+Products. Any identification or use of a party’s brand, logo or 
+trademark shall conform with the trademark use guidelines provided by 
+one party to the other. Customer agrees to participate with DataStax in 
+publicity events which include the items listed below:
+	•	Use of Customer’s logo on the DataStax website
+	•	Conversations with analysts (subject to separate NDA)
+	•	Providing a quote in a DataStax press release
+	•	Full press release announcing Customer’s engagement 
+with DataStax
+	•	Written success story/case study related to DataStax
+	•	Video success story/case study related to DataStax
+	•	Speaking at DataStax events and/or webinar
+	•	Speak to press regarding DataStax
+
+8. Warranties
+
+8.1. Services Warranty. DataStax warrants that it will perform any 
+Services with reasonable care and skill and consistent with standards 
+generally observed for services of a substantially similar nature. If 
+the Services fail to conform to the foregoing warranty, as Customer’s 
+sole and exclusive remedy for such failure, DataStax will promptly 
+attempt to re-perform the applicable Service within 30 days or such 
+longer period as agreed to by the parties in writing, or at DataStax’ 
+option refund any Fees Customer has previously paid for the applicable 
+Service(s).
+
+8.2. Software Warranty. DataStax warrants that, during the Subscription 
+Period, the Software will perform in material conformance with its 
+published Documentation. If the Software fails to conform to the 
+foregoing warranty, as Customer’s sole and exclusive remedy for such 
+failure, DataStax will remedy such issues as provided in the DataStax 
+Support Policy, or at DataStax’ option and upon Customer’s return of 
+the Software to DataStax, refund the unused portion of any Fees paid 
+for the Subscription. Under a No-Fee License, the Software is provided 
+free of charge, and on that basis, to the fullest extent permitted by 
+law, DataStax provides the Software “as-is” and without any warranties.
+
+8.3. Authority. Each party warrants that it has full power and 
+authority to enter into this Agreement.
+
+8.4. Harmful Code. DataStax will use commercially reasonable efforts 
+and commercially available technology to scan the Software made 
+available to Customer for, and to remove from the then-current-version 
+of the Software, any computer “viruses,” “worms” and other malicious 
+code.
+
+8.5. EXCEPT AS EXPRESSLY PROVIDED IN THIS AGREEMENT, NEITHER DATASTAX 
+NOR ITS SUPPLIERS PROVIDES ANY OTHER WARRANTIES REGARDING THE PRODUCTS, 
+AND TO THE FULLEST EXTENT PERMITTED BY LAW DISCLAIMS ALL OTHER 
+WARRANTIES, TERMS AND CONDITIONS, EXPRESS OR IMPLIED, INCLUDING BUT NOT 
+LIMITED TO ANY IMPLIED WARRANTIES AND CONDITIONS OF MERCHANTABILITY, 
+QUALITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT, AND ANY 
+WARRANTIES, TERMS AND CONDITIONS ARISING OUT OF COURSE OF DEALING OR 
+USAGE OF TRADE. NO ADVICE OR INFORMATION, WHETHER ORAL OR WRITTEN, 
+OBTAINED FROM DATASTAX OR ELSEWHERE WILL CREATE ANY WARRANTY, TERM OR 
+CONDITION UNLESS EXPRESSLY STATED IN THIS AGREEMENT. THE PRODUCTS ARE 
+NOT DESIGNED, MANUFACTURED, OR INTENDED FOR HIGH RISK ACTIVITIES.
+
+9. Indemnity
+
+9.1. Indemnity by DataStax. DataStax shall defend or settle at its sole 
+expense any claim brought against Customer, its directors, officers, or 
+employees by a third party alleging that the Software as delivered by 
+DataStax infringes or misappropriates any patent, copyright, or trade 
+secret of a third party, and DataStax shall pay all damages finally 
+awarded or costs of settlement of the claim provided that Customer: (1) 
+provides DataStax prompt written notice of any claim; (2) gives 
+DataStax sole control of the defense and settlement of the claim but 
+may not settle any claim unless such settlement fully releases Customer 
+from any liability; and (3) provides all reasonable assistance in 
+connection with the claim.
+
+9.2. Injunctions. If Customer’s rights to use the Software are, or in 
+DataStax’ opinion could be, enjoined due to an indemnified claim, then 
+DataStax may, at its sole option and expense: (1) procure for Customer 
+the right to continue using the Software according to the terms of this 
+Agreement, (2) modify the Software such that it operates with 
+materially equivalent functionality without infringing or 
+misappropriation, or (3) if neither of the foregoing options is 
+commercially reasonable, terminate the Subscription and refund the 
+unused portion of any Fees paid for the Subscription.
+
+9.3. Exclusions. The indemnity provided by DataStax under this 
+Agreement does not extend to claims arising from or relating to: (1) 
+use of the Software under a No-Fee License; (2) modifications to the 
+Software not provided by or approved in writing by DataStax; (3) use of 
+the Software in combination with any data, software, or hardware not 
+provided by DataStax to the extent the alleged infringement would not 
+have occurred without the combination; (4) Third Party Software; or (5) 
+allegedly infringing activities that continue after DataStax has 
+informed Customer in writing of and made available to Customer at no 
+additional charge a substantially similar version of the Software that 
+would have avoided the alleged infringement.
+
+9.4. Remedy. This section states Customer’s sole and exclusive remedy 
+with respect to claims of infringement of third party proprietary 
+rights of any kind and is subject to the terms of the section titled 
+“Limitation of Liability.”
+
+10. Limitation of Liability
+
+To the fullest extent permitted by applicable law, in no event shall
+DataStax or its suppliers be liable for damages other than direct 
+damages, including the cost of procurement of substitute goods or 
+technology, loss of profits, or for any special, consequential, 
+incidental, punitive or indirect damages on any theory of liability, 
+whether in statute, contract, tort, strict liability, indemnity or 
+otherwise, even if advised of the possibility of such damages. To the 
+fullest extent permitted by applicable law, in no event shall the total 
+liability of DataStax to Customer under this Agreement exceed the 
+greater of the total amounts paid by Customer to DataStax during the 12 
+months prior to the date the claim arises, or ten thousand US dollars. 
+The liability limitations in this paragraph (and otherwise in the 
+Agreement) do not limit or exclude damages for bodily injury or death 
+or other damages that under applicable law cannot lawfully be limited 
+or excluded.
+
+11. Insurance
+
+During the term of this Agreement, DataStax will maintain at least the
+following levels of insurance coverage: (1) general commercial 
+liability of $1 million per occurrence, $2 million aggregate for bodily 
+injury and property damage; (2) automotive, hired and non-owned 
+liability of $1 million for bodily injury and property damage; (3) 
+errors and omissions of $2 million per claim and aggregate limit; and 
+(4) workers’ compensation meeting statutory limits.
+
+12. Miscellaneous
+
+12.1. Affiliates. DataStax and Customer agree that Affiliates of 
+Customer may acquire Products from DataStax or its Affiliates by 
+entering an Order Schedule with DataStax (or a DataStax Affiliate) that 
+incorporates the terms and conditions of this Agreement and sets forth 
+the then-applicable pricing. The parties acknowledge that adjustments 
+to the terms of this Agreement may be made in a particular Order 
+Schedule (for example, to address disparate tax and/or legal regimes in 
+other geographic regions). “Affiliate” means an entity that owns or 
+controls, is owned or controlled by, or is under common control or 
+ownership with a party, where “control” is the possession, direct or 
+indirect, of the power to direct or cause the direction of the 
+management and policies of an entity, whether through ownership of 
+voting securities, by contract or otherwise.
+
+12.2. Assignment. The Agreement may not be assigned by either party by 
+operation of law or otherwise, without the prior written consent of the 
+other party, which consent will not be unreasonably withheld. 
+Notwithstanding the foregoing, either party may assign this Agreement 
+in its entirety (including all Order Schedules), without consent of the 
+other party, to its Affiliate or in connection with a merger, 
+acquisition, corporate reorganization, or the sale of all or 
+substantially all of the assets of the business to which the Agreement 
+relates. Any such assignment shall be effective upon payment of all 
+amounts then due.
+
+12.3. Conflicting Terms. If there is a conflict among the documents 
+that make up this Agreement, the documents will control in the 
+following order: the Order Schedule, these Enterprise Terms, and the 
+terms located at any URL referenced in these Enterprise Terms.
+
+12.4. Entire Agreement. This Agreement sets out all terms agreed 
+between the parties and supersedes all other agreements between the 
+parties relating to its subject matter. In entering into this 
+Agreement, neither party has relied on, and neither party will have any 
+right or remedy based on, any statement, representation or warranty 
+(whether made negligently or innocently), except those expressly set 
+out in this Agreement. The terms located at a URL referenced in this 
+Agreement are hereby incorporated by this reference. After the 
+Effective Date, DataStax may provide Customer with an updated URL in 
+place of any URL in this Agreement. Customer agrees that its purchase 
+of a Subscription is neither contingent upon the delivery of any future 
+functionality or features nor dependent upon any oral or written public 
+comments made by DataStax, including any roadmaps or target release 
+dates, with respect to future functionality or features.
+
+12.5. Export Controls. Customer agrees to comply with all export and 
+re-export restrictions and regulations of the Department of Commerce 
+and any other United States or foreign agencies and authorities in 
+connection with Customer’s use of the Products. In particular, but 
+without limitation, the Software may not, in violation of any laws, be 
+exported or re-exported: (1) into any U.S. embargoed country; or (2) to 
+anyone on the U.S. Treasury Department’s list of Specially Designated 
+Nationals or the U.S. Commerce Department’s Table of Deny Orders. 
+Customer represents and warrants that Customer and its Affiliates are 
+not located in, under the control of, or a national or resident of any 
+such country or on any such list.
+
+12.6. Force Majeure. Neither party will be liable for failure or delay 
+in its performance under this Agreement to the extent caused by 
+circumstances beyond its reasonable control. DataStax reserves the 
+right to suspend Subscriptions or Services to comply with laws.
+
+12.7. Governing Law. This Agreement is to be construed in accordance 
+with and governed by the internal laws of the State of California 
+without regard to its conflict of laws principles, and each party 
+hereby consents to the jurisdiction of the federal or state courts of 
+Santa Clara County, California, USA. Each party hereby waives any right 
+to jury trial in any litigation in any way arising out of or related to 
+this Agreement.
+
+12.8. Independent Contractors. This Agreement will not be construed as 
+creating an agency, partnership, joint venture or any other form of 
+association, for tax purposes or otherwise, between the parties; the 
+parties will at all times be and remain independent contractors.
+
+12.9. No Third-Party Beneficiaries. This Agreement does not confer any 
+benefits on any third party unless it expressly states that it does.
+
+12.10. Notices. All notices must be in writing and addressed to the 
+other party’s legal department and primary point of contact. Notice 
+will be treated as given on receipt, as verified by written or 
+automated receipt or by electronic log (as applicable).
+
+12.11. Severability and Waiver. In the event that any provision of this 
+Agreement (or any portion hereof) is determined by a court of competent 
+jurisdiction to be illegal, invalid or otherwise unenforceable, the 
+provision (or portion) will be enforced to the extent possible 
+consistent with the stated intention of the parties, or, if incapable 
+of enforcement, will be deemed to be severed and deleted from this 
+Agreement, while the remainder of this Agreement will continue in full 
+force. The waiver by either party of any default or breach of this 
+Agreement will not constitute a waiver of any other or subsequent 
+default or breach.
+
+12.13. Survival. The following sections will survive any expiration or 
+termination of this Agreement: Payment, Restrictions, Proprietary 
+Rights, Effect of Termination (Section 6.4), Confidentiality, 
+Limitation of Liability, and Miscellaneous.
+
+12.14. Updates. Except as expressly provided herein, no modification of 
+this Agreement will be effective unless contained in writing and signed 
+by an authorized representative of each party. DataStax may make 
+changes to terms located at a URL referenced in this Agreement, 
+including these Enterprise Terms (collectively, the “URL Terms”) from 
+time to time. DataStax will post the amended terms and will update the 
+“Last Updated Date” at the top. By continuing to access or use the 
+Software after DataStax has provided Customer with such notice of a 
+change, Customer is indicating that it agrees to be bound by the 
+modified terms. If the change has a material adverse impact on Customer 
+and Customer does not agree to the change, Customer must notify 
+DataStax within 30 days of the applicable Last Updated Date. If 
+Customer notifies DataStax as required, then Customer will remain 
+governed by the terms in effect immediately prior to the change until 
+the end of the then-current Subscription Period (or, in the case of 
+Services, the completion of the applicable Services). If the 
+Subscription Period is renewed, it will do so under the updated URL 
+Terms.

@@ -1,0 +1,199 @@
+/*
+ * Copyright DataStax, Inc.
+ *
+ * Please see the included license file for details.
+ */
+
+buildscript {
+    repositories {
+        jcenter()
+    }
+    dependencies {
+        classpath 'de.undercouch:gradle-download-task:3.3.0'
+    }
+}
+
+plugins {
+    id "com.chrisgahlert.gradle-dcompose-plugin" version "0.9.2"
+}
+
+apply plugin: 'de.undercouch.download'
+
+import de.undercouch.gradle.tasks.download.Download
+
+repositories {
+    maven {
+        url "https://plugins.gradle.org/m2/"
+    }
+
+    mavenCentral()
+}
+
+dependencies {
+    dcompose 'com.github.docker-java:docker-java:3.0.13'
+}
+
+ext {
+    downloadsDir = file("$buildDir/downloads")
+}
+
+defaultPropertyValue 'imagePrefix', (project.hasProperty('dockerRegistry') ? "$dockerRegistry/" : "") + 'datastax'
+
+def components = ['server', 'opscenter', 'studio']
+
+components.each {
+    defaultPropertyValue "${it}Version", "**"
+    defaultPropertyValue "${it}LatestVersion", "false"
+}
+
+defaultPropertyValue 'downloadUrlPrefix', 'https://downloads.datastax.com/enterprise'
+defaultPropertyValue 'downloadServerUrlTemplate', "${downloadUrlPrefix}/dse-\${VERSION}-bin.tar.gz"
+defaultPropertyValue 'downloadAgentUrlTemplate', "${downloadUrlPrefix}/datastax-agent-\${VERSION}.tar.gz"
+defaultPropertyValue 'downloadOpscenterUrlTemplate', "${downloadUrlPrefix}/opscenter-\${VERSION}.tar.gz"
+defaultPropertyValue 'downloadStudioUrlTemplate', "${downloadUrlPrefix}/datastax-studio-\${VERSION}.tar.gz"
+
+// configure dcompose plugin logging to show build image progress
+System.setProperty("org.slf4j.simpleLogger.log.com.github.dockerjava.core.command.BuildImageResultCallback", "debug")
+System.setProperty("org.slf4j.simpleLogger.showThreadName", "false")
+System.setProperty("org.slf4j.simpleLogger.showLogName", "false")
+System.setProperty("org.slf4j.simpleLogger.logFile", "System.out")
+
+dcompose {
+
+    if (project.hasProperty('dockerRegistry'))
+    {
+        registry(dockerRegistry) {
+            if (project.hasProperty('registryUsername'))
+            {
+                withUsername project.registryUsername
+            }
+
+            if (project.hasProperty('registryPassword'))
+            {
+                withPassword project.registryPassword
+            }
+        }
+    } else {
+        dockerClientConfig = {
+            if (project.hasProperty('registryUsername'))
+            {
+                withRegistryUsername project.registryUsername
+            }
+
+            if (project.hasProperty('registryPassword'))
+            {
+                withRegistryPassword project.registryPassword
+            }
+        }
+    }
+
+    downloadServer {
+        image = 'svenbrnn/alpine-lighttpd2:latest'
+        publishAllPorts = true
+        binds = ["$downloadsDir:/var/www"]
+        deploy = false
+    }
+
+    dseBase {
+        baseDir = file('base')
+        repository = 'dse-base'
+        deploy = false
+        forcePull = true
+    }
+
+    mkdir downloadsDir
+
+    components.each { name ->
+        def dockerFile = fileTree(dir: name, include: "${project.ext.get("${name}Version")}/Dockerfile").singleFile
+        def version = dockerFile.readLines().find { it.contains('ARG VERSION=')}.split('=')[1].trim()
+        services.maybeCreate(name)
+        services.getByName(name) {
+            baseDir = dockerFile.parentFile
+            repository = "$imagePrefix/dse-$name:$version"
+            tasks.getByName(buildImageTaskName).dependsOn(services.getByName('dseBase').buildImageTaskName)
+        }
+
+        if (project.ext.get("${name}LatestVersion") == "true") {
+            services.maybeCreate("${name}Latest")
+            services.getByName("${name}Latest") {
+                image = "$imagePrefix/dse-$name:$version"
+                repository = "$imagePrefix/dse-$name:latest"
+                tasks.getByName(pullImageTaskName).dependsOn(services.getByName(name).buildImageTaskName)
+            }
+
+        }
+
+        def t = tasks.create("download${name.capitalize()}Archives", Download) {
+            dest downloadsDir
+            onlyIfModified  true
+            def engine = new groovy.text.SimpleTemplateEngine()
+            def urlsTemplates = [ project.ext.get("download${name.capitalize()}UrlTemplate")]
+            def urls = urlsTemplates.collect { engine.createTemplate(it).make('VERSION': version).toString() }
+            if (name == 'server') {
+                def agentVersion = dockerFile.readLines().find { it.contains('ARG DSE_AGENT_VERSION=')}.split('=')[1].trim()
+                urls << engine.createTemplate(project.ext.get("downloadAgentUrlTemplate")).make('VERSION': agentVersion).toString()
+            }
+
+            src(urls)
+        }
+        configure(tasks."build${name.capitalize()}Image") {
+            dependsOn t, startDownloadServerContainer
+            finalizedBy stopDownloadServerContainer
+        }
+
+        stopDownloadServerContainer.mustRunAfter tasks."build${name.capitalize()}Image"
+    }
+}
+
+task skipDownloads
+
+startDownloadServerContainer {
+    mustRunAfter tasks.withType(Download)
+    doLast {
+        def host = service.dockerHost
+        def port = service.findHostPort(80)
+        if (host in ['localhost', '127.0.0.1'])
+        {
+            host = runInDockerClasspath {
+                def response = client.execCreateCmd(containerId)
+                        .withCmd('sh', '-c', 'ip route | awk \'\$1 == \"default\" {print \$3}\'')
+                        .withAttachStdout(true)
+                        .exec()
+                def out = new ByteArrayOutputStream()
+                def callback = loadClass('com.github.dockerjava.core.command.ExecStartResultCallback').newInstance(out, System.err)
+                client.execStartCmd(response.id).exec(callback).awaitCompletion()
+                out.toString().trim()
+            }
+        }
+        defaultPropertyValue("dockerHost", host)
+        ext.url = "http://${dockerHost}:${port}"
+        logger.lifecycle "Serving files on ${url}"
+        components.each { name ->
+            dcompose.services.getByName(name) {
+                buildArgs = [ 'URL_PREFIX': url ]
+            }
+        }
+    }
+}
+
+[pushDownloadServerImage, pushDseBaseImage]*.enabled = false
+
+gradle.taskGraph.whenReady { g ->
+    if (g.hasTask(skipDownloads)) {
+        tasks.withType(Download) { enabled = false }
+    }
+}
+
+if (hasProperty('downloadUsername') && hasProperty('downloadPassword')) {
+    tasks.withType(Download) {
+        username downloadUsername
+        password downloadPassword
+    }
+}
+
+void defaultPropertyValue(name, value) {
+    if (!project.ext.has(name)) {
+        project.ext.set(name, value)
+    }
+}
+
