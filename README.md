@@ -389,7 +389,7 @@ Run `./gradlew tasks` to get the list of all available tasks.
 
 # Getting Help
 
-If you are a customer of DataStax, please use the official support channels for any help you need.
+File an issue here or email us at techpartner@datastax.com
 
 [datastax-enterprise](http://www.datastax.com/products/datastax-enterprise)
 [docker-hub-tags](https://hub.docker.com/r/datastax/dse-server/tags/)
