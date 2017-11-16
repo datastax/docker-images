@@ -45,7 +45,7 @@ The file name must match a corresponding configuration file in the image and inc
 **For example let’s mount the host directory /dse/conf on the exposed volume /conf**
 
 ```
-docker run -e DS_LICENSE=accept --name my-dse -d  -v /dse/conf:/conf datastax/dse-server
+docker run -e DS_LICENSE=accept --name my-dse -d  -v /dse/conf:/conf store/datastax/dse-server:5.1.4
 ```
 
 ## Configuration with Environment Variables
@@ -64,7 +64,7 @@ In order to use these images, it is necessary to accept the terms of the DataSta
 
 
 ```
-docker run -e DS_LICENSE=accept --name my-dse -d datastax/dse-server
+docker run -e DS_LICENSE=accept --name my-dse -d store/datastax/dse-server:5.1.4
 
 ```
 
@@ -132,7 +132,7 @@ docker run -v <some_root_dir>:<container_volume>:<options>
 **For example let’s mount the host directory /dse/conf on the exposed volume /conf**
 
 ```
-docker run -e DS_LICENSE=accept --name my-dse -d  -v /dse/conf:/conf datastax/dse-server
+docker run -e DS_LICENSE=accept --name my-dse -d  -v /dse/conf:/conf store/datastax/dse-server:5.1.4
 ```
 
 Please referece the [Docker volumes doc](https://docs.docker.com/engine/tutorials/dockervolumes/#mount-a-host-directory-as-a-data-volume) for more information on mounting Volumes
@@ -144,7 +144,7 @@ Chances are you'll want to expose some ports on the Docker host so that you can 
 **For example**:
 
 ```
-docker run -e DS_LICENSE=accept --name my-dse -d -p 9042:9042 datastax/dse-server
+docker run -e DS_LICENSE=accept --name my-dse -d -p 9042:9042 store/datastax/dse-server:5.1.4
 ```
 
 This will expose the container's CQL client port (9042) on the host at port 9042. For a list of the ports used by DSE, see the [Securing DataStax Enterprise ports documentation](http://docs.datastax.com/en/dse/5.1/dse-admin/datastax_enterprise/security/secFirewallPorts.html).
@@ -179,28 +179,28 @@ By default, DSE will start in Cassandra only mode.
 **Example: Start DSE in Cassandra only mode**
 
 ```
-docker run -e DS_LICENSE=accept --name my-dse -d datastax/dse-server
+docker run -e DS_LICENSE=accept --name my-dse -d store/datastax/dse-server:5.1.4
 ```
 
 
 **Example: Start a Graph Node**
 
 ```
-docker run -e DS_LICENSE=accept --name my-dse -d datastax/dse-server -g
+docker run -e DS_LICENSE=accept --name my-dse -d store/datastax/dse-server:5.1.4 -g
 In the container, this will run dse cassandra -g to start a graph node.
 ```
 
 **Example: Start an Analytics (Spark) Node**
 
 ```
-docker run -e DS_LICENSE=accept --name my-dse -d datastax/dse-server -k
+docker run -e DS_LICENSE=accept --name my-dse -d store/datastax/dse-server:5.1.4 -k
 In the container, this will run dse cassandra -k to start an analytics node.
 ```
 
 **Example: Start a Search Node**
 
 ```
-docker run -e DS_LICENSE=accept --name my-dse -d datastax/dse-server -s
+docker run -e DS_LICENSE=accept --name my-dse -d store/datastax/dse-server:5.1.4 -s
 In the container, this will run dse cassandra -s to start a search node.
 ```
 
