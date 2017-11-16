@@ -291,7 +291,8 @@ See [DSE documentation](http://docs.datastax.com/en/dse/5.1/dse-admin/) for furt
 
 1. Create an OpsCenter container:
 
-```docker run -e DS_LICENSE=accept --name my-opscenter -d -p 8888:8888 datastax/dse-opscenter
+```
+docker run -e DS_LICENSE=accept --name my-opscenter -d -p 8888:8888 datastax/dse-opscenter
 ```
 
 
@@ -299,8 +300,10 @@ For a list of available OpsCenter versions see Docker Hub tags.
 
 2. Create DataStax Enterprise server nodes, providing the link to the OpsCenter container using the Docker name.
 
-```docker run -e DS_LICENSE=accept --link my-opscenter:opscenter --name my-dse -d datastax/dse-server
 ```
+docker run -e DS_LICENSE=accept --link my-opscenter:opscenter --name my-dse -d datastax/dse-server
+```
+
 Where my-dse is the DSE node.
 
 3. Find the ip of the DSE container 
