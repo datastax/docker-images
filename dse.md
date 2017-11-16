@@ -263,7 +263,7 @@ See [DSE documentation](http://docs.datastax.com/en/dse/5.1/dse-admin/) for furt
 
 # Using Docker Compose for Automated Provisioning
 
-Bootstrapping a multi-node cluster can be automated with [Docker Compose](https://docs.docker.com/compose/).  Sample `compose.yml` files are available for [DSE](https://github.com/datastax/docker-images/blob/master/docker-compose.yml) and our other images ([Opscetner](https://github.com/datastax/docker-images/blob/master/docker-compose.opscenter.yml) & [Studio](https://github.com/datastax/docker-images/blob/master/docker-compose.studio.yml)).
+Bootstrapping a multi-node cluster can be automated with [Docker Compose](https://docs.docker.com/compose/).  Sample `compose.yml` files are available for [DSE](https://github.com/datastax/docker-images/blob/master/docker-compose.yml) and our other images ([OpsCenter](https://github.com/datastax/docker-images/blob/master/docker-compose.opscenter.yml) & [Studio](https://github.com/datastax/docker-images/blob/master/docker-compose.studio.yml)).
 
 **3-Node Setup**
 
