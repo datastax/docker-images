@@ -55,7 +55,7 @@ Docker Hub:
 
 # Creating a DataStax Enterprise Container
 
-Use the options describe in this section to create DataStax Enterprise server containers. For a list of available DSE versions see [Docker Hub tags](https://hub.docker.com/r/datastax/dse-server/tags/). 
+Use the options describe in this section to create DataStax Enterprise server containers. 
 
 ## Docker run options
 Use the following options to set up a DataStax Enterprise server container. 
@@ -90,25 +90,25 @@ You can combine the options to run more than one feature. For more examples, see
 
 
 ```
-docker run -e DS_LICENSE=accept --name my-dse -d datastax/dse-server
+docker run -e DS_LICENSE=accept --name my-dse -d store/datastax/dse-server:5.1.4
 ```
 
 ### Create a DSE container with Graph enabled
 
 ```
-docker run -e DS_LICENSE=accept --name my-dse -d datastax/dse-server -g
+docker run -e DS_LICENSE=accept --name my-dse -d store/datastax/dse-server:5.1.4 -g
 ```
 
 ### Create a DSE container with Analytics (Spark) enabled
 
 ```
-docker run -e DS_LICENSE=accept --name my-dse -d datastax/dse-server -k
+docker run -e DS_LICENSE=accept --name my-dse -d store/datastax/dse-server:5.1.4 -k
 ```
 
 ### Create a DSE container with Search enabled
 
 ```
-docker run -e DS_LICENSE=accept --name my-dse -d datastax/dse-server -s
+docker run -e DS_LICENSE=accept --name my-dse -d store/datastax/dse-server:5.1.4 -s
 ```
 
 ## Managing the configuration
@@ -145,7 +145,7 @@ The file name must match a corresponding configuration file in the image and inc
 4. Start the container. For example to start a transactional node:
  
 ```
-docker run -e DS_LICENSE=accept --name my-dse -d  -v /dse/conf:/conf datastax/dse-server
+docker run -e DS_LICENSE=accept --name my-dse -d  -v /dse/conf:/conf store/datastax/dse-server:5.1.4
 ```
 
 ### Using environment variables
@@ -207,7 +207,7 @@ docker run -v <local_directory>:<container_volume>
 **Example**
 Mount the host directory /dse/conf to the DSE volume /conf to manage configuration files.
 ```
-docker run -e DS_LICENSE=accept --name my-dse -d  -v /dse/conf:/conf datastax/dse-server
+docker run -e DS_LICENSE=accept --name my-dse -d  -v /dse/conf:/conf store/datastax/dse-server:5.1.4
 ```
 
 See [Docker's Use volumes](https://docs.docker.com/engine/tutorials/dockervolumes/#mount-a-host-directory-as-a-data-volume) for more information.
@@ -301,7 +301,7 @@ For a list of available OpsCenter versions see Docker Hub tags.
 2. Create DataStax Enterprise server nodes, providing the link to the OpsCenter container using the Docker name.
 
 ```
-docker run -e DS_LICENSE=accept --link my-opscenter:opscenter --name my-dse -d datastax/dse-server
+docker run -e DS_LICENSE=accept --link my-opscenter:opscenter --name my-dse -d store/datastax/dse-server:5.1.4
 ```
 
 Where my-dse is the DSE node.
@@ -395,7 +395,6 @@ Run `./gradlew tasks` to get the list of all available tasks.
 File an issue here or email us at techpartner@datastax.com
 
 [datastax-enterprise](http://www.datastax.com/products/datastax-enterprise)
-[docker-hub-tags](https://hub.docker.com/r/datastax/dse-server/tags/)
 [start-dse](http://docs.datastax.com/en/dse/5.1/dse-admin/datastax_enterprise/operations/startStop/startDseStandalone.html)
 [dse-ports](http://docs.datastax.com/en/dse/5.1/dse-admin/datastax_enterprise/security/secFirewallPorts.html)
 [opscenter-docs](http://docs.datastax.com/en/opscenter/6.1/index.html)
