@@ -58,6 +58,8 @@ When you start the DSE image, you can adjust the configuration of the Cassandra 
 ### EULA Acceptance
 In order to use these images, it is necessary to accept the terms of the DataStax license. This is done by setting the environment variable `DS_LICENSE` to the value accept when running containers based on the produced images. To show the license included in the images, set the variable `DS_LICENSE` to the value `accept`. *The images will not start without the variable set to the accept value.*
 
+[DataStax License Terms](https://www.datastax.com/terms)
+
 **For Example**
 
 
@@ -268,3 +270,6 @@ Bootstrapping a multi-node cluster can be automated with [Docker Compose](https:
 ```
 docker-compose  -f docker-compose.yml up -d --scale node=2
 ```
+
+# Licensing
+[DataStax License Terms](https://www.datastax.com/terms)
