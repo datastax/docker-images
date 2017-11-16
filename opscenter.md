@@ -33,6 +33,8 @@ In order to use these images, it is necessary to accept the terms of the DataSta
 docker run -e DS_LICENSE=accept --name my-opscenter -d -p 8888:8888 datastax/dse-opscenter
 ```
 
+[DataStax License Terms](https://www.datastax.com/terms)
+
 # Single Mount Configuration Management
 
 DataStax has made it easy to make configuration changes by creating a script that looks in the exposed Volume `/conf` for any added configuration files and loads them at container start. 
@@ -132,3 +134,6 @@ docker exec -it my-opscenter bash
 
 To exit the shell without stopping the container use *`ctl P ctl Q`*
 
+# Licensing
+[OpsCenter License Terms]https://www.datastax.com/datastax-opscenter-license-terms
+[DataStax License Terms](https://www.datastax.com/terms)
