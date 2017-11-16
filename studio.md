@@ -31,6 +31,8 @@ The DataStax provided Docker images are intended to be used for Development purp
 # EULA Acceptance
 In order to use these images, it is necessary to accept the terms of the DataStax license. This is done by setting the environment variable `DS_LICENSE` to the value accept when running containers based on the produced images. To show the license included in the images, set the variable `DS_LICENSE` to the value `accept`. *The images will not start without the variable set to the accept value.*
 
+[DataStax License Terms](https://www.datastax.com/terms)
+
 ```
 docker run -e DS_LICENSE=accept --link my-dse --name my-studio -p 9091:9091 -d datastax/dse-studio
 
@@ -119,4 +121,6 @@ docker exec -it my-studio bash
 
 To exit the shell without stopping the container use *`ctl P ctl Q`*
 
-
+# Licensing
+[Studio License Terms](https://www.datastax.com/terms/datastax-studio-license-terms)
+[DataStax License Terms](https://www.datastax.com/terms)
