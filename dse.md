@@ -2,7 +2,7 @@
 DataStax Enterprise is the best distribution of Apache Cassandra™ with integrated Search, Analytics, and Graph capabilities.
 
 # Supported Tags
-* 5.1.5([5.1.5/Dockerfile](https://github.com/datastax/docker-images/blob/master/server/5.1/Dockerfile))
+* 5.1.4([5.1.4/Dockerfile](https://github.com/datastax/docker-images/blob/master/server/5.1/Dockerfile))
 
 # Quick Reference 
 ### Where to get help:
