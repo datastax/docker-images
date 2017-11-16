@@ -50,8 +50,9 @@ RUN set -x \
     && chown -R dse:dse ${DSE_AGENT_HOME} \
 # Create folders
     && (for dir in /var/lib/cassandra /var/lib/spark /var/lib/dsefs /var/log/cassandra /var/log/spark /config ; do \
-        mkdir -p $dir && chown -R dse:dse $dir && chmod 777 $dir ; \
-    done )
+        mkdir -p $dir && chown -R dse:dse $dir ; \
+        done ) \
+    && chmod 1777 /var/lib/spark /var/log/spark
 
 ENV PATH $DSE_HOME/bin:$PATH
 ENV HOME $DSE_HOME
