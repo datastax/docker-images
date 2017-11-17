@@ -5,7 +5,7 @@
 * [Creating a DataStax Enterprise Container](#creating-a-datastax-enterprise-container)
 * [Enabling Advanced Functionality](#enabling-advanced-functionality)
 * [DSE Examples](#examples)
-* [Managing the Configuration](managing-the-configuration)
+* [Managing the Configuration](#managing-the-configuration)
 * [Using the DSE Conf Volume](#using-the-dse-conf-volume)
 * [Using Environment Variables](#using-environment-variables)
 * [Volumes and Data](#volumes-and-data)
