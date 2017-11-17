@@ -90,25 +90,25 @@ Combine startup options to run more than one feature. For more examples, see  [S
 
 
 ```
-docker run -e DS_LICENSE=accept --name my-dse -d datastax/dse-server
+docker run -e DS_LICENSE=accept --name my-dse -d store/datastax/dse-server:5.1.5
 ```
 
 ### Create a DSE container with Graph enabled
 
 ```
-docker run -e DS_LICENSE=accept --name my-dse -d datastax/dse-server -g
+docker run -e DS_LICENSE=accept --name my-dse -d store/datastax/dse-server:5.1.5 -g
 ```
 
 ### Create a DSE container with Analytics (Spark) enabled
 
 ```
-docker run -e DS_LICENSE=accept --name my-dse -d datastax/dse-server -k
+docker run -e DS_LICENSE=accept --name my-dse -d store/datastax/dse-server:5.1.5 -k
 ```
 
 ### Create a DSE container with Search enabled
 
 ```
-docker run -e DS_LICENSE=accept --name my-dse -d datastax/dse-server -s
+docker run -e DS_LICENSE=accept --name my-dse -d store/datastax/dse-server:5.1.5 -s
 ```
 
 ## Managing the configuration
@@ -145,7 +145,7 @@ The file name must match a corresponding configuration file in the image and inc
 4. Start the container. For example to start a transactional node:
  
 ```
-docker run -e DS_LICENSE=accept --name my-dse -d  -v /dse/conf:/conf datastax/dse-server
+docker run -e DS_LICENSE=accept --name my-dse -d  -v /dse/conf:/conf store/datastax/dse-server:5.1.5
 ```
 
 ### Using environment variables
@@ -207,7 +207,7 @@ docker run -v <local_directory>:<container_volume>
 **Example**
 Mount the host directory /dse/conf to the DSE volume /conf to manage configuration files.
 ```
-docker run -e DS_LICENSE=accept --name my-dse -d  -v /dse/conf:/conf datastax/dse-server
+docker run -e DS_LICENSE=accept --name my-dse -d  -v /dse/conf:/conf store/datastax/dse-server:5.1.5
 ```
 
 See [Docker's Use volumes](https://docs.docker.com/engine/tutorials/dockervolumes/#mount-a-host-directory-as-a-data-volume) for more information.
@@ -303,7 +303,7 @@ See [OpsCenter Docker run options](#OpsCenter-Docker-run-options) for additional
 2. Create a [DataStax Enterprise (DSE) server](https://store.docker.com/images/datastax) container that is linked to the OpsCenter container. 
 
  ```
-docker run -e DS_LICENSE=accept --link my-opscenter:opscenter --name my-dse -d datastax/dse-server
+docker run -e DS_LICENSE=accept --link my-opscenter:opscenter --name my-dse -d store/datastax/dse-server:5.1.5
 ```
 
 3. Get the DSE container IP address:
