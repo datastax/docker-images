@@ -28,7 +28,7 @@ See [OpsCenter Docker run options](#OpsCenter-Docker-run-options) for additional
 2. Create a [DataStax Enterprise (DSE) server](https://store.docker.com/images/datastax) container that is linked to the OpsCenter container. 
 
  ```
-docker run -e DS_LICENSE=accept --link my-opscenter:opscenter --name my-dse -d datastax/dse-server
+docker run -e DS_LICENSE=accept --link my-opscenter:opscenter --name my-dse -d store/datastax/dse-server:5.1.5
 ```
 
 3. Get the DSE container IP address:
