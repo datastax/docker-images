@@ -18,8 +18,8 @@
 * [Getting Help](#getting-help)
 * [Licensing](#license)
 
-
-# DataStax Platform Overview
+![](https://upload.wikimedia.org/wikipedia/commons/e/e5/DataStax_Logo.png)
+# DataStax platform overview
 
 Built on the 
 best distribution of Apache Cassandra™, DataStax Enterprise is the always-on 
@@ -29,19 +29,18 @@ and monitoring into a single unified platform. We power your
 apps' real-time moments so you can create instant insights 
 and powerful customer experiences.
 
-![](https://upload.wikimedia.org/wikipedia/commons/e/e5/DataStax_Logo.png)
 
 
-# Getting Started with DataStax and Docker
+# Getting started with DataStax and Docker
 
-Use DataStax provided Docker images in non-production environments for development, to learn DataStax Enterprise, OpsCenter and DataStax Studio, to try new ideas, or to test and demonstrate an application. The following images are available:
+Use DataStax provided Docker images to create containers in non-production environments for development, to learn DataStax Enterprise, DataStax OpsCenter and DataStax Studio, to try new ideas, or to test and demonstrate an application. The following images are available:
 
-Docker Store (Login to docker store and subscribe to the image):
-* [DataStax Enterprise](https://store.docker.com/images/datastax): The best distribution of Apache Cassandra™ with integrated Search, Analytics, and Graph capabilities
+* Docker Store (log in to Docker store and subscribe to the image):
+ * [DataStax Enterprise](https://store.docker.com/images/datastax): The best distribution of Apache Cassandra™ with integrated Search, Analytics, and Graph capabilities.
 
-Docker Hub:
-* [DataStax Studio](https://hub.docker.com/r/datastax/dse-studio/): An interactive developer’s tool for DataStax Enterprise which is designed to help your DSE database, Cassandra Query Language (CQL), DSE Graph, and Gremlin Query Language development.
-* [DataStax Enterprise OpsCenter](https://hub.docker.com/r/datastax/dse-opscenter/): The web-based visual management and monitoring solution for DataStax Enterprise (DSE)
+* Docker Hub:
+ * [DataStax Studio](https://hub.docker.com/r/datastax/dse-studio/): An interactive developer’s tool for DataStax Enterprise which is designed to help your DSE database, Cassandra Query Language (CQL), DSE Graph, and Gremlin Query Language development.
+ * [DataStax OpsCenter](https://hub.docker.com/r/datastax/dse-opscenter/): The web-based visual management and monitoring solution for DataStax Enterprise (DSE).
 
 
 
@@ -55,7 +54,7 @@ Docker Hub:
 
 # Creating a DataStax Enterprise Container
 
-Use the options describe in this section to create DataStax Enterprise server containers. 
+Use the options described in this section to create DataStax Enterprise server containers. 
 
 ## Docker run options
 Use the following options to set up a DataStax Enterprise server container. 
@@ -66,6 +65,7 @@ Option | Description
 `-d` | (Recommended) Starts the container in the background.
 `-p` | Publish container ports on the host computer to allow remote access to DSE, OpsCenter, and Studio. See [Exposing DSE public ports](#exposing-dse-public-ports)
 `-v` | Bind mount a directory on the local host to a DSE Volume to manage configuration or preserve data. See [Volumes and data](#volumes-and-data). 
+`--link` | Link DSE container to OpsCenter or Studio to DSE. For example, `--link my-opscenter:opscenter` or `--link my-dse`.
 `--name` |Assigns a name to the container.
 
 These are the most commonly used `docker run` switches used in deploying DSE.  For a full list please see [docker run](https://docs.docker.com/engine/reference/commandline/run/) reference.
@@ -81,7 +81,7 @@ Option | Description
 -k | Enables and starts Analytics.
 -g | Enables and starts a DSE Graph.
 
-You can combine the options to run more than one feature. For more examples, see the Starting [DSE documentation](http://docs.datastax.com/en/dse/5.1/dse-admin/datastax_enterprise/operations/startStop/startDseStandalone.html).
+Combine startup options to run more than one feature. For more examples, see  [Starting DataStax Enterprise as a stand-alone process ](http://docs.datastax.com/en/dse/5.1/dse-admin/datastax_enterprise/operations/startStop/startDseStandalone.html).
 
 ## Examples
 
@@ -90,25 +90,25 @@ You can combine the options to run more than one feature. For more examples, see
 
 
 ```
-docker run -e DS_LICENSE=accept --name my-dse -d store/datastax/dse-server:5.1.4
+docker run -e DS_LICENSE=accept --name my-dse -d datastax/dse-server
 ```
 
 ### Create a DSE container with Graph enabled
 
 ```
-docker run -e DS_LICENSE=accept --name my-dse -d store/datastax/dse-server:5.1.4 -g
+docker run -e DS_LICENSE=accept --name my-dse -d datastax/dse-server -g
 ```
 
 ### Create a DSE container with Analytics (Spark) enabled
 
 ```
-docker run -e DS_LICENSE=accept --name my-dse -d store/datastax/dse-server:5.1.4 -k
+docker run -e DS_LICENSE=accept --name my-dse -d datastax/dse-server -k
 ```
 
 ### Create a DSE container with Search enabled
 
 ```
-docker run -e DS_LICENSE=accept --name my-dse -d store/datastax/dse-server:5.1.4 -s
+docker run -e DS_LICENSE=accept --name my-dse -d datastax/dse-server -s
 ```
 
 ## Managing the configuration
@@ -145,7 +145,7 @@ The file name must match a corresponding configuration file in the image and inc
 4. Start the container. For example to start a transactional node:
  
 ```
-docker run -e DS_LICENSE=accept --name my-dse -d  -v /dse/conf:/conf store/datastax/dse-server:5.1.4
+docker run -e DS_LICENSE=accept --name my-dse -d  -v /dse/conf:/conf datastax/dse-server
 ```
 
 ### Using environment variables
@@ -207,7 +207,7 @@ docker run -v <local_directory>:<container_volume>
 **Example**
 Mount the host directory /dse/conf to the DSE volume /conf to manage configuration files.
 ```
-docker run -e DS_LICENSE=accept --name my-dse -d  -v /dse/conf:/conf store/datastax/dse-server:5.1.4
+docker run -e DS_LICENSE=accept --name my-dse -d  -v /dse/conf:/conf datastax/dse-server
 ```
 
 See [Docker's Use volumes](https://docs.docker.com/engine/tutorials/dockervolumes/#mount-a-host-directory-as-a-data-volume) for more information.
@@ -289,43 +289,36 @@ See [DSE documentation](http://docs.datastax.com/en/dse/5.1/dse-admin/) for furt
 
 # Creating an OpsCenter container
 
-1. Create an OpsCenter container:
+Follow these steps to create an Opscenter container and a connected DataStax Enterprise server container on the same Docker host. 
 
+To create and connect the containers:
+
+1. First create an OpsCenter container.
+
+ ```
+docker run -e DS_LICENSE=accept -d -p 8888:8888 --name my-opscenter
 ```
-docker run -e DS_LICENSE=accept --name my-opscenter -d -p 8888:8888 datastax/dse-opscenter
+See [OpsCenter Docker run options](#OpsCenter-Docker-run-options) for additional options that persist data or manage configuration.
+
+2. Create a [DataStax Enterprise (DSE) server](https://store.docker.com/images/datastax) container that is linked to the OpsCenter container. 
+
+ ```
+docker run -e DS_LICENSE=accept --link my-opscenter:opscenter --name my-dse -d datastax/dse-server
 ```
 
+3. Get the DSE container IP address:
 
-For a list of available OpsCenter versions see Docker Hub tags.
-
-2. Create DataStax Enterprise server nodes, providing the link to the OpsCenter container using the Docker name.
-
-```
-docker run -e DS_LICENSE=accept --link my-opscenter:opscenter --name my-dse -d store/datastax/dse-server:5.1.4
-```
-
-Where my-dse is the DSE node.
-
-3. Find the ip of the DSE container 
-
-```
-docker inspect my-dse | grep '"IPAddress":'
-```
-or
-
-```
+ 
+ ```
 docker exec -it my-dse nodetool status
 ```
 
+5. Open a browser and go to `http://DOCKER_HOST_IP:8888`.
+6. Click `Manage existing cluster`. 
+7. In `host name`, enter the DSE IP address.
+8. Click `Install agents manually`. Note that the agent is already installed on the DSE image; no installation is required.
 
-4. Open a browser and point to http://DOCKER_HOST_IP:8888. The Create the new connection dialog displays.
-5. Click Manage existing cluster.
-6. Enter ipaddress obtained in step 3 as the host name.
-7. Choose Install agents manually.
-
-The agent is already available on the DSE node, no installation is required.
-
-See [OpsCenter documentation](http://docs.datastax.com/en/opscenter/6.1/) for further info on usage/configuration.
+OpsCenter is ready to use with DSE. See the [OpsCenter User Guide](http://docs.datastax.com/en/opscenter/6.1/) for detailed usage and configuration instructions.
 
 # Creating a Studio container
 
@@ -392,13 +385,20 @@ Run `./gradlew tasks` to get the list of all available tasks.
 
 # Getting Help
 
-File an issue here or email us at techpartner@datastax.com
+File an [issue](https://github.com/datastax/docker-images/issues) or email us at <techpartner@datastax.com>.
+  
+* [DataStax Enterprise products and features](http://www.datastax.com/products/datastax-enterprise)
 
-[datastax-enterprise](http://www.datastax.com/products/datastax-enterprise)
-[start-dse](http://docs.datastax.com/en/dse/5.1/dse-admin/datastax_enterprise/operations/startStop/startDseStandalone.html)
-[dse-ports](http://docs.datastax.com/en/dse/5.1/dse-admin/datastax_enterprise/security/secFirewallPorts.html)
-[opscenter-docs](http://docs.datastax.com/en/opscenter/6.1/index.html)
-[studio-docs](http://docs.datastax.com/en/dse/5.1/dse-dev/datastax_enterprise/studio/stdToc.html)
+* [DataStax Docker hub tags](https://hub.docker.com/r/datastax/dse-server/tags/)
+
+* [DataStax Administration Guide](docs.datastax.com/en/dse/5.1/dse-admin/)
+
+ * [Starting DSE](http://docs.datastax.com/en/dse/5.1/dse-admin/datastax_enterprise/operations/startStop/startDseStandalone.html)
+
+ * [Ports](http://docs.datastax.com/en/dse/5.1/dse-admin/datastax_enterprise/security/secFirewallPorts.html)
+
+* [DataStax OpsCenter User Guide](http://docs.datastax.com/en/opscenter/6.1/index.html)
+* [DataStax Studio User Guide](http://docs.datastax.com/en/dse/5.1/dse-dev/datastax_enterprise/studio/stdToc.html)
 
 # Known Issues
 
@@ -409,7 +409,10 @@ File an issue here or email us at techpartner@datastax.com
 
 # License
 
-Please review the included LICENSE file.
+Use the following links to review the license:
+
+* [OpsCenter License Terms](https://www.datastax.com/datastax-opscenter-license-terms)
+* [DataStax License Terms](https://www.datastax.com/terms)
 
 
 
