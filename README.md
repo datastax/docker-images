@@ -63,7 +63,7 @@ Option | Description
 ------------- | -------------
 `-e` | (**Required**) Sets [Environment variables](#using-environment-variables) to accept the licensing agreement and <BR> (optional) change the initial configuration.
 `-d` | (Recommended) Starts the container in the background.
-`-p` | Publish container ports on the host computer to allow remote access to DSE, OpsCenter, and Studio. See [Exposing DSE public ports](#exposing-dse-public-ports)
+`-p` | Publish container ports on the host computer to allow remote access to DSE, OpsCenter, and Studio. See [Exposing DSE public ports](#exposing-public-ports)
 `-v` | Bind mount a directory on the local host to a DSE Volume to manage configuration or preserve data. See [Volumes and data](#volumes-and-data). 
 `--link` | Link DSE container to OpsCenter or Studio to DSE. For example, `--link my-opscenter:opscenter` or `--link my-dse`.
 `--name` |Assigns a name to the container.
@@ -131,14 +131,15 @@ To use this feature:
 
 1. Create a directory on your local host. 
 
-2. Add the configuration files you want to replace.
-The file name must match a corresponding configuration file in the image and include all the required values, for example `cassandra.yaml`, `dse.yaml`, `opscenterd.conf`. For a full list of config files please see these links
+2. Add the configuration files you want to replace. Use the following links for full list of configuration files:
 
-* [DSE](https://github.com/datastax/docker-images/blob/master/server/5.1/files/overwritable-conf-files)
+  * [DSE](https://github.com/datastax/docker-images/blob/master/server/5.1/files/overwritable-conf-files)
 
-* [OPSCENTER](https://github.com/datastax/docker-images/blob/master/opscenter/6.1/files/overwritable-conf-files)
+  * [OPSCENTER](https://github.com/datastax/docker-images/blob/master/opscenter/6.1/files/overwritable-conf-files)
 
-* [STUDIO](https://github.com/datastax/docker-images/blob/master/studio/2.0/files/overwritable-conf-files)
+  * [STUDIO](https://github.com/datastax/docker-images/blob/master/studio/2.0/files/overwritable-conf-files)
+
+   The file name must match a corresponding configuration file in the image and include all the required values, for example `cassandra.yaml`, `dse.yaml`, `opscenterd.conf`. 
 
 3. Mount the local directory to the exposed Volume `/conf`.
 
@@ -153,8 +154,8 @@ docker run -e DS_LICENSE=accept --name my-dse -d  -v /dse/conf:/conf store/datas
 
 Configure the DSE image by setting environment variables when the container is created using the docker run command `-e` flag.
 
-Variable | Setting    | Description                
------------- | ------------- | -------------------- 
+Variable | Setting        | Description                
+------------ | ----------------- | -------------------- 
 `DS_LICENSE` | accept | **Required**. Set to accept to acknowledge that you agree with the terms of the DataStax license. To show the license, set the variable `DS_LICENSE` to the value `accept`. *The image only starts if the variable set to accept.*
 `LISTEN_ADDRESS` | *IP_address* | The IP address to listen for connections from other nodes. Defaults to the container's IP address.
 `BROADCAST_ADDRESS` | *IP_address* | The IP address to advertise to other nodes. Defaults to the same value as the `LISTEN_ADDRESS`.
@@ -174,12 +175,12 @@ Variable | Setting    | Description
 DSE images expose the following volumes.  
 
 * For DataStax Enterprise Transactional, Search, Graph, and Analytics workloads:
-	* `/var/lib/cassandra`: Data from Cassandra
-	* `/var/lib/spark`: Data from DSE Analytics w/ Spark
-	* `/var/lib/dsefs`: Data from DSEFS
-	* `/var/log/cassandra`: Logs from Cassandra
-	* `/var/log/spark`: Logs from Spark
-	* `/conf`: Directory to add custom config files for the container to pickup.
+   * `/var/lib/cassandra`: Data from Cassandra
+   * `/var/lib/spark`: Data from DSE Analytics w/ Spark
+   * `/var/lib/dsefs`: Data from DSEFS
+   * `/var/log/cassandra`: Logs from Cassandra
+   * `/var/log/spark`: Logs from Spark
+   * `/conf`: Directory to add custom config files for the container to pickup.
 
 * For OpsCenter: `/var/lib/opscenter`
 
@@ -191,9 +192,9 @@ To persist data, pre-create directories on the local host and map the directory 
 **NOTE:** If the volumes are not mounted from the local host, all data is lost when the container is removed.
 
 * DSE Transactional, Search, Graph, and Analytics nodes:
- * `/var/lib/cassandra/data`  
- * `/var/lib/cassandra/commit_logs` 
- * `/var/lib/cassandra/saved_caches`
+   * `/var/lib/cassandra/data`  
+   * `/var/lib/cassandra/commit_logs` 
+   * `/var/lib/cassandra/saved_caches`
 
 * OpsCenter: `/var/lib/opscenter`
 
@@ -212,7 +213,7 @@ docker run -e DS_LICENSE=accept --name my-dse -d  -v /dse/conf:/conf store/datas
 
 See [Docker's Use volumes](https://docs.docker.com/engine/tutorials/dockervolumes/#mount-a-host-directory-as-a-data-volume) for more information.
 
-## Exposing DSE public ports
+## Exposing public ports
 
 To allow remote hosts to access a DataStax Enterprise node, OpsCenter, or Studio, map the DSE public port to a host port using the docker run `-p` flag. 
 
