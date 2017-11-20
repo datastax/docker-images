@@ -50,7 +50,7 @@ Use DataStax provided Docker images to create containers in non-production envir
 
 * When [building](#building) custom images from the DataStax github repository, a [DataStax Academy account](https://academy.datastax.com/). 
 
-# Creating a DataStax Enterprise Container
+# Creating a DataStax Enterprise container
 
 Use the options described in this section to create DataStax Enterprise server containers. 
 
@@ -131,11 +131,11 @@ To use this feature:
 
 2. Add the configuration files you want to replace. Use the following links for full list of configuration files:
 
-  * [DSE](https://github.com/datastax/docker-images/blob/master/server/5.1/files/overwritable-conf-files)
+     * [DSE](https://github.com/datastax/docker-images/blob/master/server/5.1/files/overwritable-conf-files)
 
-  * [OPSCENTER](https://github.com/datastax/docker-images/blob/master/opscenter/6.1/files/overwritable-conf-files)
+     * [OPSCENTER](https://github.com/datastax/docker-images/blob/master/opscenter/6.1/files/overwritable-conf-files)
 
-  * [STUDIO](https://github.com/datastax/docker-images/blob/master/studio/2.0/files/overwritable-conf-files)
+     * [STUDIO](https://github.com/datastax/docker-images/blob/master/studio/2.0/files/overwritable-conf-files)
 
    The file name must match a corresponding configuration file in the image and include all the required values, for example `cassandra.yaml`, `dse.yaml`, `opscenterd.conf`. 
 
