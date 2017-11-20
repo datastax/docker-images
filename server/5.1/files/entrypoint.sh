@@ -11,6 +11,12 @@ set -e
 
 link_external_config "${DSE_HOME}"
 
+#create directories for holding the node's data, logs, etc.
+mkdir -p /var/lib/spark/worker
+mkdir -p /var/lib/spark/rdd
+mkdir -p /var/log/spark/worker
+mkdir -p /var/log/spark/master
+
 ############################################
 # Set up variables/configure the image
 ############################################
