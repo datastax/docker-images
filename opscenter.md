@@ -132,4 +132,3 @@ Use the Docker images maintained by [DataStax](https://www.datastax.com/):
 ## Licensing terms
 * [OpsCenter License Terms](https://www.datastax.com/datastax-opscenter-license-terms)
 * [DataStax License Terms](https://www.datastax.com/terms)
-* [DataStax License Terms](https://www.datastax.com/terms)
