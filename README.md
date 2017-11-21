@@ -333,7 +333,7 @@ Check [Studio documentation](http://docs.datastax.com/en/dse/5.1/dse-dev/datasta
 
 
 
-# Using Docker Compose for Automated Provisioning
+# Using Docker compose for automated provisioning
 
 Bootstrapping a multi-node cluster with OpsCenter and Studio can be elegantly automated with [Docker Compose](https://docs.docker.com/compose/). To get sample `compose.yml` files visit the following links.  
 
@@ -382,24 +382,23 @@ in the project root.
 
 Run `./gradlew tasks` to get the list of all available tasks.
 
-# Getting Help
+# Getting help
 
 File an [issue](https://github.com/datastax/docker-images/issues) or email us at <techpartner@datastax.com>.
   
 * [DataStax Enterprise products and features](http://www.datastax.com/products/datastax-enterprise)
 
-* [DataStax Docker hub tags](https://hub.docker.com/r/datastax/dse-server/tags/)
-
 * [DataStax Administration Guide](docs.datastax.com/en/dse/5.1/dse-admin/)
 
- * [Starting DSE](http://docs.datastax.com/en/dse/5.1/dse-admin/datastax_enterprise/operations/startStop/startDseStandalone.html)
+   * [Starting DSE](http://docs.datastax.com/en/dse/5.1/dse-admin/datastax_enterprise/operations/startStop/startDseStandalone.html)
 
- * [Ports](http://docs.datastax.com/en/dse/5.1/dse-admin/datastax_enterprise/security/secFirewallPorts.html)
+   * [Ports](http://docs.datastax.com/en/dse/5.1/dse-admin/datastax_enterprise/security/secFirewallPorts.html)
 
 * [DataStax OpsCenter User Guide](http://docs.datastax.com/en/opscenter/6.1/index.html)
+
 * [DataStax Studio User Guide](http://docs.datastax.com/en/dse/5.1/dse-dev/datastax_enterprise/studio/stdToc.html)
 
-# Known Issues
+# Known issues
 
 * CFS is not supported
 * Changing any file not included in the list of approved configuration files will require an additional host volume or customization of the image. An example is SSL key management.

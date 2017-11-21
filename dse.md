@@ -1,249 +1,244 @@
-# Short Description
-DataStax Enterprise is the best distribution of Apache Cassandra™ with integrated Search, Analytics, and Graph capabilities.
-
-# Supported Tags
-* 5.1.4([5.1.4/Dockerfile](https://github.com/datastax/docker-images/blob/master/server/5.1/Dockerfile))
-
-# Quick Reference 
-### Where to get help:
-[DataStax Academy](https://academy.datastax.com/), [DataStax Slack](https://academy.datastax.com/slack)
-### Where to file issues:
-https://github.com/datastax/docker-images/issues
-
-### Maintained by 
-[DataStax](https://www.datastax.com/) 
-
-# What is DataStax Enterprise
-
-Built on the best distribution of Apache Cassandra™, DataStax Enterprise is the always-on data platform designed to allow you to effortlessly build and scale your apps, integrating graph, search, analytics, administration, developer tooling, and monitoring into a single unified platform. We power your apps' real-time moments so you can create instant insights and powerful customer experiences.
 
 ![](https://upload.wikimedia.org/wikipedia/commons/e/e5/DataStax_Logo.png)
+# Overview
+
+Built on the 
+best distribution of Apache Cassandra™, DataStax Enterprise is the always-on 
+data platform designed to allow you to effortlessly build and scale your apps, 
+integrating graph, search, analytics, administration, developer tooling, 
+and monitoring into a single unified platform. We power your 
+apps' real-time moments so you can create instant insights 
+and powerful customer experiences.
 
 
-# Getting Started with DataStax and Docker
+
+# Getting started
+
+Use DataStax provided Docker images to create containers in non-production environments for development, to learn DataStax Enterprise, DataStax OpsCenter and DataStax Studio, to try new ideas, or to test and demonstrate an application. The following images are available:
+
+* Docker Store (log in to Docker store and subscribe to the image):
+  * [DataStax Enterprise](https://store.docker.com/images/datastax): The best distribution of Apache Cassandra™ with integrated Search, Analytics, and Graph capabilities.
+
+* Docker Hub:
+   * [DataStax Studio](https://hub.docker.com/r/datastax/dse-studio/): An interactive developer’s tool for DataStax Enterprise which is designed to help your DSE database, Cassandra Query Language (CQL), DSE Graph, and Gremlin Query Language development.
+   * [DataStax OpsCenter](https://hub.docker.com/r/datastax/dse-opscenter/): The web-based visual management and monitoring solution for DataStax Enterprise (DSE).
 
 
-The DataStax provided docker images are intended to be used for Development purposes in non-production environments. You can use these images to learn [DSE](https://store.docker.com/images/datastax), [OpsCenter](https://hub.docker.com/r/datastax/dse-opscenter) and [DataStax Studio](https://hub.docker.com/r/datastax/dse-studio), to try new ideas, and to test and demonstrate your application.
+# Creating a DataStax Enterprise container
+
+Use the options described in this section to create DataStax Enterprise server containers. 
+
+## Docker run options
+Use the following options to set up a DataStax Enterprise server container. 
+
+Option | Description
+------------- | -------------
+`-e` | (**Required**) Sets [Environment variables](#using-environment-variables) to accept the licensing agreement and <BR> (optional) change the initial configuration.
+`-d` | (Recommended) Starts the container in the background.
+`-p` | Publish container ports on the host computer to allow remote access to DSE, OpsCenter, and Studio. See [Exposing DSE public ports](#exposing-public-ports)
+`-v` | Bind mount a directory on the local host to a DSE Volume to manage configuration or preserve data. See [Volumes and data](#volumes-and-data). 
+`--link` | Link DSE container to OpsCenter or Studio to DSE. For example, `--link my-opscenter:opscenter` or `--link my-dse`.
+`--name` |Assigns a name to the container.
+
+These are the most commonly used `docker run` switches used in deploying DSE.  For a full list please see [docker run](https://docs.docker.com/engine/reference/commandline/run/) reference.
+
+## Enabling advanced functionality
+
+By default, the DSE server image is set up as a transactional (database) node.
+To set up the node with DSE advanced functionality, add the option that enables feature to the end of the `docker run` command.
+
+Option | Description
+------------- | -------------
+-s | Enables and starts DSE Search.
+-k | Enables and starts Analytics.
+-g | Enables and starts a DSE Graph.
+
+Combine startup options to run more than one feature. For more examples, see  [Starting DataStax Enterprise as a stand-alone process ](http://docs.datastax.com/en/dse/5.1/dse-admin/datastax_enterprise/operations/startStop/startDseStandalone.html).
+
+## Examples
 
 
-## Single Mount Configuration Management
+### Create a DSE database container
 
-DataStax has made it easy to make configuration changes by creating a script that looks in the exposed Volume `/conf` for any added configuration files and loads them at container start. 
+
+```
+docker run -e DS_LICENSE=accept --name my-dse -d store/datastax/dse-server:5.1.5
+```
+
+### Create a DSE container with Graph enabled
+
+```
+docker run -e DS_LICENSE=accept --name my-dse -d store/datastax/dse-server:5.1.5 -g
+```
+
+### Create a DSE container with Analytics (Spark) enabled
+
+```
+docker run -e DS_LICENSE=accept --name my-dse -d store/datastax/dse-server:5.1.5 -k
+```
+
+### Create a DSE container with Search enabled
+
+```
+docker run -e DS_LICENSE=accept --name my-dse -d store/datastax/dse-server:5.1.5 -s
+```
+
+## Managing the configuration
+
+Manage the DSE configuration using one of the following options:  
+
+* [DSE configuration volume](#using-the-dse-conf-volume) use configuration files from a mounted host directory without replacing or customizing the containers. 
+
+* [DSE environment variables](#using-environment-variables) that change the configuration at runtime. 
+
+* Docker file/directory volume mounts
+
+* Docker overlay file system
+
+### Using the DSE conf volume
+
+DataStax provided Docker images include a start up script that swaps DSE configuration files found in the Volume `/conf` with the configuration file in the default location on the container. 
 
 To use this feature: 
 
 1. Create a directory on your local host. 
 
-2. Add the configuration files you want to replace.
-The file name must match a corresponding configuration file in the image and include all the required values, for example `cassandra.yaml`, `dse.yaml`. For a full list of config files please see
+2. Add the configuration files you want to replace. Use the following links for full list of configuration files:
 
-* [DSE](https://github.com/datastax/docker-images/blob/master/server/5.1/files/overwritable-conf-files)
+     * [DSE](https://github.com/datastax/docker-images/blob/master/server/5.1/files/overwritable-conf-files)
 
-3. Mount the local directory to the exposed Volume /conf by starting the container with the -v flag
+     * [OPSCENTER](https://github.com/datastax/docker-images/blob/master/opscenter/6.1/files/overwritable-conf-files)
 
+     * [STUDIO](https://github.com/datastax/docker-images/blob/master/studio/2.0/files/overwritable-conf-files)
 
-**For example let’s mount the host directory /dse/conf on the exposed volume /conf**
+   The file name must match a corresponding configuration file in the image and include all the required values, for example `cassandra.yaml`, `dse.yaml`, `opscenterd.conf`. 
 
+3. Mount the local directory to the exposed Volume `/conf`.
+
+4. Start the container. For example to start a transactional node:
+ 
 ```
-docker run -e DS_LICENSE=accept --name my-dse -d  -v /dse/conf:/conf store/datastax/dse-server:5.1.4
-```
-
-## Configuration with Environment Variables
-
-
-When you start the DSE image, you can adjust the configuration of the Cassandra instance by passing one or more environment variables on the `docker run` command line
-
-## Required
-
-### EULA Acceptance
-In order to use these images, it is necessary to accept the terms of the DataStax license. This is done by setting the environment variable `DS_LICENSE` to the value accept when running containers based on the produced images. To show the license included in the images, set the variable `DS_LICENSE` to the value `accept`. *The images will not start without the variable set to the accept value.*
-
-[DataStax License Terms](https://www.datastax.com/terms)
-
-**For Example**
-
-
-```
-docker run -e DS_LICENSE=accept --name my-dse -d store/datastax/dse-server:5.1.4
-
+docker run -e DS_LICENSE=accept --name my-dse -d  -v /dse/conf:/conf store/datastax/dse-server:5.1.5
 ```
 
-## Optional
+### Using environment variables
 
-### LISTEN_ADDRESS 
-The IP address to listen for connections from other nodes. Defaults to the container's IP address.
 
-### BROADCAST_ADDRESS
-The IP address to advertise to other nodes. Defaults to the same value as the `LISTEN_ADDRESS`.
+Configure the DSE image by setting environment variables when the container is created using the docker run command `-e` flag.
 
-### RPC_ADDRESS 
-The IP address to listen for client/driver connections. Defaults to 0.0.0.0 (i.e. wildcard).
+Variable | Setting        | Description                
+------------ | ----------------- | -------------------- 
+`DS_LICENSE` | accept | **Required**. Set to accept to acknowledge that you agree with the terms of the DataStax license. To show the license, set the variable `DS_LICENSE` to the value `accept`. *The image only starts if the variable set to accept.*
+`LISTEN_ADDRESS` | *IP_address* | The IP address to listen for connections from other nodes. Defaults to the container's IP address.
+`BROADCAST_ADDRESS` | *IP_address* | The IP address to advertise to other nodes. Defaults to the same value as the `LISTEN_ADDRESS`.
+`RPC_ADDRESS` |*IP_address* | The IP address to listen for client/driver connections. Default: `0.0.0.0`.
+`BROADCAST_RPC_ADDRESS` | *IP_address* | The IP address to advertise to clients/drivers. Defaults to the same value as the `BROADCAST_ADDRESS`.
+`SEEDS` | *IP_address* | The comma-delimited list of seed nodes for the cluster. Defaults to this node's `BROADCAST_ADDRESS`. 
+`START_RPC` | `true` \| `false` | Whether or not to start the Thrift RPC server. Will leave the default in the `cassandra.yaml` file if not set.
+`CLUSTER_NAME` | *string* | The name of the cluster. Default: `Test Cluster`.
+`NUM_TOKENS`|*int*|The number of tokens randomly assigned to the node. Default: `8`.
+`DC` | *string* | Datacenter name. Default: `Cassandra`.
+`RACK` | *string* | Rack name. Default: `rack1`.
+`OPSCENTER_IP` | *IP_address* \| *string* | Address of OpsCenter instance to use for DSE management; it can be specified via linking the OpsCenter container using opscenter as the name.
 
-### BROADCAST_RPC_ADDRESS 
-The IP address to advertise to clients/drivers. Defaults to the same value as the `BROADCAST_ADDRESS`.
 
-### SEEDS 
-The comma-delimited list of seed nodes for the cluster. Defaults to this node's `BROADCAST_ADDRESS` if not set and will only be set the first time the node is started.
+## Volumes and data
 
-### START_RPC
-Whether to start the Thrift RPC server. Will leave the default in the `cassandra.yaml` file if not set.
+DataStax Enterprise server images expose the following volumes for Database, Search, Graph, and Analytics workloads:  
 
-### CLUSTER_NAME
-The name of the cluster. Will leave the default in the `cassandra.yaml` file if not set.
+   * `/var/lib/cassandra`: Data from Cassandra
+   * `/var/lib/spark`: Data from DSE Analytics w/ Spark
+   * `/var/lib/dsefs`: Data from DSEFS
+   * `/var/log/cassandra`: Logs from Cassandra
+   * `/var/log/spark`: Logs from Spark
+   * `/conf`: Directory to add custom config files for the container to pickup.
 
-### NUM_TOKENS
-The number of tokens randomly assigned to this node. Will leave the default in the `cassandra.yaml` file if not set.
+### Preserving data
+To persist data, pre-create directories on the local host and map the directory to the corresponding volume using the docker run `-v` flag. 
 
-### DC
-Datacenter name, default: Cassandra
+**NOTE:** If the volumes are not mounted from the local host, all data is lost when the container is removed.
 
-### RACK
-Rack name, default: rack1
+DSE Transactional, Search, Graph, and Analytics nodes:
 
-### OPSCENTER_IP
-Optional, the address of OpsCenter instance we would like to use for DSE management it can be specified via linking the OpsCenter container using opscenter as its name.
+* `/var/lib/cassandra/data`  
+* `/var/lib/cassandra/commit_logs`
+* `/var/lib/cassandra/saved_caches`
 
-# Database and Data Storage
-
-The following volumes are created and exposed with the images:  
-
-**DSE**
-
-* `/var/lib/cassandra`: Data from Cassandra
-* `/var/lib/spark`: Data from DSE Analytics w/ Spark
-* `/var/lib/dsefs`: Data from DSEFS
-* `/var/log/cassandra`: Logs from Cassandra
-* `/var/log/spark`: Logs from Spark
-* `/conf`: Directory to add custom config files for the container to pickup.
-
-To persist data it is recommended that you pre-create directories and map them via the Docker run command to.
-
-**DataStax recommends the following mounts be made** 
-
-**Users that do not expose the following mounts outside of the container will lose all data**
-
-For DSE: `/var/lib/cassandra/data`  `/var/lib/cassandra/commit_logs` and `/var/lib/cassandra/saved_caches`
-
-To mount a volume, you would use the `-v` flag with the docker run command when starting the container with the following syntax.  
+To mount a volume, use the following syntax:  
 
 ```
-docker run -v <some_root_dir>:<container_volume>:<options>
+docker run -v <local_directory>:<container_volume>
 ```
-**For example let’s mount the host directory /dse/conf on the exposed volume /conf**
-
+**Example**
+Mount the host directory /dse/conf to the DSE volume /conf to manage configuration files.
 ```
-docker run -e DS_LICENSE=accept --name my-dse -d  -v /dse/conf:/conf store/datastax/dse-server:5.1.4
-```
-
-Please referece the [Docker volumes doc](https://docs.docker.com/engine/tutorials/dockervolumes/#mount-a-host-directory-as-a-data-volume) for more information on mounting Volumes
-
-# Exposing Ports on the Docker Host
-
-Chances are you'll want to expose some ports on the Docker host so that you can talk to DSE from outside of Docker (for example, from code running on a machine outside of the host). You can do that using the -p switch when calling docker run and the most common port you'll probably want to expose is `9042` which is where CQL clients communicate. 
-
-**For example**:
-
-```
-docker run -e DS_LICENSE=accept --name my-dse -d -p 9042:9042 store/datastax/dse-server:5.1.4
+docker run -e DS_LICENSE=accept --name my-dse -d  -v /dse/conf:/conf store/datastax/dse-server:5.1.5
 ```
 
-This will expose the container's CQL client port (9042) on the host at port 9042. For a list of the ports used by DSE, see the [Securing DataStax Enterprise ports documentation](http://docs.datastax.com/en/dse/5.1/dse-admin/datastax_enterprise/security/secFirewallPorts.html).
+See Docker docs > [Use volumes](https://docs.docker.com/engine/tutorials/dockervolumes/#mount-a-host-directory-as-a-data-volume) for more information.
 
+## Exposing public ports
 
+To allow remote hosts to access a DataStax Enterprise node, map the DSE public port to a host port using the docker run `-p` flag. 
 
-# Starting DSE nodes
+For a complete list of ports see [Securing DataStax Enterprise ports](http://docs.datastax.com/en/dse/5.1/dse-admin/datastax_enterprise/security/secFirewallPorts.html#secFirewallPorts).
+ 
+**NOTE**: When mapping a container port to a local host port ensure that host port is not already in use by another container or the host.
+   
+### Example
 
-The image's entrypoint script runs the command dse cassandra and will append any switches you provide to that command. So it's possible to start DSE in any of the other supported modes by adding switches to the end of your docker run command.
-
-
-
-Option | Description
-------------- | -------------
---name | Optional: Assign a name to the container
--e | Sets environment variables Required: DS_LICENSE=accept for containers to start  Optional: Other environment variables
--d | Recommended: Starts the container in the background
--p | Publish containers ports to the host Optional : for DSE Required: for Opscenter and Studio
--v | Optional: Bind Mount a Volume
-
-These are the most commonly used `docker run` switches used in deploying DSE.  For a full list please see [docker run](https://docs.docker.com/engine/reference/commandline/run/) reference.
-
-
-Option | Description
-------------- | -------------
--s | Optional: Starts a search node
--k | Optional: Starts an analytics node
--g | Optional: Starts a graph node
-
-By default, DSE will start in Cassandra only mode.
-
-**Example: Start DSE in Cassandra only mode**
-
+To allow CQL clients to access the database, open port `9042`:  
 ```
-docker run -e DS_LICENSE=accept --name my-dse -d store/datastax/dse-server:5.1.4
+docker run -e DS_LICENSE=accept --name my-dse -d -p 9042:9042 store/datastax/dse-server:5.1.5
 ```
 
-
-**Example: Start a Graph Node**
-
-```
-docker run -e DS_LICENSE=accept --name my-dse -d store/datastax/dse-server:5.1.4 -g
-In the container, this will run dse cassandra -g to start a graph node.
-```
-
-**Example: Start an Analytics (Spark) Node**
-
-```
-docker run -e DS_LICENSE=accept --name my-dse -d store/datastax/dse-server:5.1.4 -k
-In the container, this will run dse cassandra -k to start an analytics node.
-```
-
-**Example: Start a Search Node**
-
-```
-docker run -e DS_LICENSE=accept --name my-dse -d store/datastax/dse-server:5.1.4 -s
-In the container, this will run dse cassandra -s to start a search node.
-```
-
-You can also use combinations of those switches. For more examples, see the Starting [DSE documentation](http://docs.datastax.com/en/dse/5.1/dse-admin/datastax_enterprise/operations/startStop/startDseStandalone.html).
+# Running DSE commands and viewing logs
 
 
+Use the `docker exec -it <container_name>` command to run DSE tools and other operations. 
 
-### Container shell access and viewing Cassandra logs
+## Opening an interactive bash shell
 
-**Attaching to running container**
-
-If you used the -d flag to start you containers in the background, instead of using docker exec for individual commands you may want a bash shell to run commands. To do this use 
+If the container is running in the background (using the `-d`), use the following command to open an interactive bash shell to run DSE commands. 
 
 ```
 docker exec -it <container_name> bash
 ```
 
-**For example**
+To exit the shell without stopping the container type exit.
+
+## Opening an interactive CQL shell (cqlsh)
+
+Use the following command to open cqlsh. 
 
 ```
-docker exec -it my-dse bash
+docker exec -it <container_name> cqlsh
 ```
 
 To exit the shell without stopping the container use *`ctl P ctl Q`*
 
-**You can view logs via Docker's container logs**
+
+## Viewing logs
+
+You can view the DSE logs using the Docker log command. For example:
 
 ```
 docker logs my-dse
 ```
-You can also use your favorite viewer/editor for individual files
+
+You can also use your favorite viewer/editor to see individual log files.
 
 `docker exec -it <container_name> <viewer/editor> <path_to_log>`
 
-**For example**  to view the system.log
+For example, to view the system.log:
 
 ```
 docker exec -it my-dse less /var/log/cassandra/system.log
 ```
 
-## Starting DSE Tools
+## Using DSE tools
 
-With a node running, use` docker exec` to run other tools. 
+Use` docker exec` to run other tools. 
 
 **For example**
 
@@ -253,23 +248,36 @@ With a node running, use` docker exec` to run other tools.
 docker exec -it my-dse nodetool status
 ```
 
-`cqlsh`:
-
-```
-docker exec -it my-dse cqlsh
-```
-
 See [DSE documentation](http://docs.datastax.com/en/dse/5.1/dse-admin/) for further info on usage/configuration 
 
-# Using Docker Compose for Automated Provisioning
+# Quick reference
 
-Bootstrapping a multi-node cluster can be automated with [Docker Compose](https://docs.docker.com/compose/).  Sample `compose.yml` files are available for [DSE](https://github.com/datastax/docker-images/blob/master/docker-compose.yml) and our other images ([OpsCenter](https://github.com/datastax/docker-images/blob/master/docker-compose.opscenter.yml) & [Studio](https://github.com/datastax/docker-images/blob/master/docker-compose.studio.yml)).
+## Automated provisioning
+Automate bootstrapping of a multi-node cluster with DataStax OpsCenter and Studio using [Docker Compose](https://docs.docker.com/compose/). To instructions and sample `compose.yml` files go to [Using Docker compose for automated provisioning](https://github.com/datastax/docker-images#Using-Docker-Compose-for-Automated-Provisioning)
 
-**3-Node Setup**
+## Building DSE
+To create customized images of DSE, see [Building](https://github.com/datastax/docker-images#building).
 
-```
-docker-compose  -f docker-compose.yml up -d --scale node=2
-```
+## Getting help
 
-# Licensing
-[DataStax License Terms](https://www.datastax.com/terms)
+File an [issue](https://github.com/datastax/docker-images/issues) or email us at <techpartner@datastax.com>.
+  
+* [DataStax Enterprise products and features](http://www.datastax.com/products/datastax-enterprise)
+
+* [DataStax Administration Guide](docs.datastax.com/en/dse/5.1/dse-admin/)
+
+   * [Starting DSE](http://docs.datastax.com/en/dse/5.1/dse-admin/datastax_enterprise/operations/startStop/startDseStandalone.html)
+
+   * [Ports](http://docs.datastax.com/en/dse/5.1/dse-admin/datastax_enterprise/security/secFirewallPorts.html)
+
+* [DataStax OpsCenter User Guide](http://docs.datastax.com/en/opscenter/6.1/index.html)
+
+* [DataStax Studio User Guide](http://docs.datastax.com/en/dse/5.1/dse-dev/datastax_enterprise/studio/stdToc.html)
+
+## License
+
+Use the following links to review the license:
+
+* [OpsCenter License Terms](https://www.datastax.com/datastax-opscenter-license-terms)
+* [DataStax License Terms](https://www.datastax.com/terms)
+
