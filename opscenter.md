@@ -4,7 +4,7 @@ DataStax OpsCenter is a web-based visual management and monitoring solution for 
 # Overview
 DataStax OpsCenter is a web-based visual management and monitoring solution for DataStax Enterprise (DSE). 
 
-## Supported Tags
+## Supported tags
 * 6.1.4 ([6.1.4/Dockerfile](https://github.com/datastax/docker-images/blob/master/opscenter/6.1/Dockerfile))
  
 
@@ -91,7 +91,7 @@ docker run -e DS_LICENSE=accept -d -v /dse/data/opscenter:/var/lib/opscenter dat
 
 See [Docker volumes doc](https://docs.docker.com/engine/tutorials/dockervolumes/#mount-a-host-directory-as-a-data-volume) for more information on mounting Volumes.
 
-# Attaching to container
+# Attaching to a container
 
 If the container was created using the Docker run `-d` option, it runs in the background. You can attach to the container and use bash instead of `docker exec` for individual commands.
 
