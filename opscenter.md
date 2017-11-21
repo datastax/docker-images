@@ -8,7 +8,7 @@ DataStax OpsCenter is a web-based visual management and monitoring solution for 
 * 6.1.4 ([6.1.4/Dockerfile](https://github.com/datastax/docker-images/blob/master/opscenter/6.1/Dockerfile))
  
 
-# Getting Started
+# Getting started
 
 Use the DataStax provided Docker images in non-production environments for development, to learn, try new ideas, and to test or demonstrate your application. 
 
@@ -131,4 +131,5 @@ Use the Docker images maintained by [DataStax](https://www.datastax.com/):
 
 ## Licensing terms
 * [OpsCenter License Terms](https://www.datastax.com/datastax-opscenter-license-terms)
+* [DataStax License Terms](https://www.datastax.com/terms)
 * [DataStax License Terms](https://www.datastax.com/terms)
