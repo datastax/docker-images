@@ -209,7 +209,7 @@ Mount the host directory /dse/conf to the DSE volume /conf to manage configurati
 docker run -e DS_LICENSE=accept --name my-dse -d  -v /dse/conf:/conf store/datastax/dse-server:5.1.5
 ```
 
-See [Docker's Use volumes](https://docs.docker.com/engine/tutorials/dockervolumes/#mount-a-host-directory-as-a-data-volume) for more information.
+See Docker docs > [Use volumes](https://docs.docker.com/engine/tutorials/dockervolumes/#mount-a-host-directory-as-a-data-volume) for more information.
 
 ## Exposing public ports
 
