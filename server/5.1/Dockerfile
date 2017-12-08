@@ -49,7 +49,7 @@ RUN set -x \
     && rm /${DSE_AGENT_TARBALL} \
     && chown -R dse:dse ${DSE_AGENT_HOME} \
 # Create folders
-    && (for dir in /var/lib/cassandra /var/lib/spark /var/lib/dsefs /var/log/cassandra /var/log/spark /config ; do \
+    && (for dir in /var/lib/cassandra /var/lib/spark /var/lib/spark/worker /var/lib/spark/rdd /var/lib/dsefs /var/log/cassandra /var/log/spark /config ; do \
         mkdir -p $dir && chown -R dse:dse $dir && chmod 777 $dir ; \
     done )
 
@@ -60,7 +60,7 @@ WORKDIR $HOME
 USER dse
 
 # Expose DSE folders
-VOLUME ["/var/lib/cassandra", "/var/lib/spark", "/var/lib/dsefs", "/var/log/cassandra", "/var/log/spark", "/opt/dse/resources"]
+VOLUME ["/var/lib/cassandra", "/var/lib/spark", "/var/lib/spark/worker", "/var/lib/spark/rdd", "/var/lib/dsefs", "/var/log/cassandra", "/var/log/spark", "/opt/dse/resources"]
 
 # CASSANDRA PORTS (INTRA-NODE, TLS INTRA-NODE, JMX, CQL, THRIFT, DSEFS INTRA-NODE, INTRA-NODE MESSAGING SERVICE)
 EXPOSE 7000 7001 7199 8609 9042 9160
