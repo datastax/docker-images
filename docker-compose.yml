@@ -1,11 +1,11 @@
 version: '2'
 services:
   seed_node:
-    image: "store/datastax/dse-server:5.1.5"
+    image: "datastax/dse-server"
     environment:
       - DS_LICENSE=accept
   node:
-    image: "store/datastax/dse-server:5.1.5"
+    image: "datastax/dse-server"
     environment:
       - DS_LICENSE=accept
       - SEEDS=seed_node
