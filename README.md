@@ -123,7 +123,7 @@ Manage the DSE configuration using one of the following options:
 
 ### Using the DSE conf volume
 
-DataStax provided Docker images include a start up script that swaps DSE configuration files found in the Volume `/conf` with the configuration file in the default location on the container. 
+DataStax provided Docker images include a start up script that swaps DSE configuration files found in the Volume `/config` with the configuration file in the default location on the container. 
 
 To use this feature: 
 
@@ -139,12 +139,12 @@ To use this feature:
 
    The file name must match a corresponding configuration file in the image and include all the required values, for example `cassandra.yaml`, `dse.yaml`, `opscenterd.conf`. 
 
-3. Mount the local directory to the exposed Volume `/conf`.
+3. Mount the local directory to the exposed Volume `/config`.
 
 4. Start the container. For example to start a transactional node:
  
 ```
-docker run -e DS_LICENSE=accept --name my-dse -d  -v /dse/conf:/conf store/datastax/dse-server:5.1.5
+docker run -e DS_LICENSE=accept --name my-dse -d  -v /dse/config:/config store/datastax/dse-server:5.1.5
 ```
 
 ### Using environment variables
@@ -178,7 +178,7 @@ DSE images expose the following volumes.
    * `/var/lib/dsefs`: Data from DSEFS
    * `/var/log/cassandra`: Logs from Cassandra
    * `/var/log/spark`: Logs from Spark
-   * `/conf`: Directory to add custom config files for the container to pickup.
+   * `/config`: Directory to add custom config files for the container to pickup.
 
 * For OpsCenter: `/var/lib/opscenter`
 
@@ -204,9 +204,9 @@ To mount a volume, use the following syntax:
 docker run -v <local_directory>:<container_volume>
 ```
 **Example**
-Mount the host directory /dse/conf to the DSE volume /conf to manage configuration files.
+Mount the host directory /dse/config to the DSE volume /config to manage configuration files.
 ```
-docker run -e DS_LICENSE=accept --name my-dse -d  -v /dse/conf:/conf store/datastax/dse-server:5.1.5
+docker run -e DS_LICENSE=accept --name my-dse -d  -v /dse/config:/config store/datastax/dse-server:5.1.5
 ```
 
 See Docker docs > [Use volumes](https://docs.docker.com/engine/tutorials/dockervolumes/#mount-a-host-directory-as-a-data-volume) for more information.
