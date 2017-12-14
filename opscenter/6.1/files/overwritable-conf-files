@@ -1,4 +1,5 @@
 conf/logback.xml
+conf/install_id
 agent/conf/address.yaml
 agent/conf/datastax-agent-env.sh
 conf/event-plugins/email.conf
