@@ -1,13 +1,23 @@
 version: '2'
 services:
   seed_node:
-    image: "datastax/dse-server"
+    image: "store/datastax/dse-server:5.1.5"
     environment:
       - DS_LICENSE=accept
+    # Allow DSE to lock memory with mlock
+    cap_add:
+    - IPC_LOCK
+    ulimits:
+      memlock: -1
   node:
-    image: "datastax/dse-server"
+    image: "store/datastax/dse-server:5.1.5"
     environment:
       - DS_LICENSE=accept
       - SEEDS=seed_node
     links:
       - seed_node
+    # Allow DSE to lock memory with mlock
+    cap_add:
+    - IPC_LOCK
+    ulimits:
+      memlock: -1
