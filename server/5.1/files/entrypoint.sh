@@ -24,6 +24,10 @@ mkdir -p /var/log/spark/master
 IP_ADDRESS="$(hostname --ip-address)"
 CASSANDRA_CONFIG="${DSE_HOME}/resources/cassandra/conf/cassandra.yaml"
 
+# SNITCH sets the snitch this node will use. Use GossipingPropertyFileSnitch if not set
+: ${SNITCH=GossipingPropertyFileSnitch}
+sed -ri 's/(endpoint_snitch:).*/\1 '"$SNITCH"'/' "$CASSANDRA_CONFIG"
+
 # RPC_ADDRESS is where we listen for drivers/clients to connect to us. Setting to 0.0.0.0 by default is fine
 # since we'll be specifying the BROADCAST_RPC_ADDRESS below
 : ${RPC_ADDRESS='0.0.0.0'}
