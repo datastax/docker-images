@@ -5,7 +5,7 @@ DataStax OpsCenter is a web-based visual management and monitoring solution for 
 DataStax OpsCenter is a web-based visual management and monitoring solution for DataStax Enterprise (DSE). 
 
 ## Supported tags
-* 6.1.4 ([6.1.4/Dockerfile](https://github.com/datastax/docker-images/blob/master/opscenter/6.1/Dockerfile))
+* 6.1.5 ([6.1.5/Dockerfile](https://github.com/datastax/docker-images/blob/master/opscenter/6.1/Dockerfile))
  
 
 # Getting started
@@ -61,7 +61,7 @@ These are the most commonly used `docker run` switches used in deploying OpsCent
 
 ### Managing the configuration
 
-DataStax provided OpsCenter images have a startup script that replaces the configuration files found in volume (`/conf`) with the corresponding file in the image. This allows you to manage the configuration from the host computer by bind mounting the local directory that contains OpsCenter configuration files to the exposed `conf` volume.
+DataStax provided OpsCenter images have a startup script that replaces the configuration files found in volume (`/config`) with the corresponding file in the image. This allows you to manage the configuration from the host computer by bind mounting the local directory that contains OpsCenter configuration files to the exposed `config` volume.
  
 To manage the configuration: 
 
@@ -70,10 +70,10 @@ To manage the configuration:
 2. Add the configuration files.
 The file name must match a corresponding configuration file in the image and include all the required values, for example `opscenterd.conf`. For a full list of config files see [Opscenter Configuration File list](https://github.com/datastax/docker-images/blob/master/opscenter/6.1/files/overwritable-conf-files).
 
-3. Bind mount the local directory to the exposed Volume `/conf` by starting the container with the `-v` flag.
+3. Bind mount the local directory to the exposed Volume `/config` by starting the container with the `-v` flag.
 
 ```
-docker run -e DS_LICENSE=accept -d -v /dse/conf/opscenter:/conf datastax/dse-opscenter --name my-opscenter
+docker run -e DS_LICENSE=accept -d -v /dse/conf/opscenter:/config datastax/dse-opscenter --name my-opscenter
 ```
 
 ### Persisting data
