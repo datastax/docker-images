@@ -20,9 +20,10 @@ Follow these steps to create a DataStax Studio container that is connected to a 
 To create and connect the containers:
 
 1. Create a DataStax Studio container:
-   ```
+
+```
 docker run -e DS_LICENSE=accept --link my-dse --name my-studio -p 9091:9091 -d datastax/dse-studio
-   ```
+```
 2. Open a browser and go to `http://DOCKER_HOST_IP:9091`
 
 3. Create the new connection using my-dse as the hostname, see DataStax Studio User Guide > [Creating a new connection](http://docs.datastax.com/en/dse/5.1/dse-dev/datastax_enterprise/studio/stdToc.html) for further instructions.
@@ -37,27 +38,27 @@ Option | Description
 `-e` | (**Required**) Set `DS_LICENSE=accept` to accept the [DataStax License Terms](https://www.datastax.com/terms).
 `-d` | (Recommended) Starts the container in the background.
 `-p` | Publish Studio port on the host computer and allow remote access. For example map, the HTTP port to allow browser access `-p 9091:9091`.
-`-v` | (Optional) Bind mount local host directories to exposed volumes to [manage the configuration](#Managing-the-configuration) or [persist data](#Persisting-data). For example, `-v /dse/conf/opscenter:/conf`. 
+`-v` | (Optional) Bind mount local host directories to exposed volumes to [manage the configuration](#Managing-the-configuration) or [persist data](#Persisting-data). For example, `-v /dse/conf/studio:/config`. 
 `--name` |Assigns a name to the container.
 
 These are the most commonly used `docker run` switches used in deploying OpsCenter.  For a full list please see [docker run](https://docs.docker.com/engine/reference/commandline/run/) reference.
 
 ### Managing the configuration
 
-DataStax provided Studio images have a startup script that replaces the configuration files found in volume (`/conf`) with the corresponding file in the image. This allows you to manage the configuration from the host computer by bind mounting the local directory that contains Studio configuration files to the exposed `conf` volume.
+DataStax provided Studio images have a startup script that replaces the configuration files found in volume (`/config`) with the corresponding file in the image. This allows you to manage the configuration from the host computer by bind mounting the local directory that contains Studio configuration files to the exposed `config` volume.
  
 To manage the configuration: 
 
 1. Create a directory on the Docker host. 
 
 2. Add the configuration files.
-The file name must match a corresponding configuration file in the image and include all the required values, for example `opscenterd.conf`. For a full list of config files see [Studio Configuration File list](https://github.com/datastax/docker-images/blob/master/studio/2.0/files/overwritable-conf-files).
+The file name must match a corresponding configuration file in the image and include all the required values, for example `configuration.yaml`. For a full list of config files see [Studio Configuration File list](https://github.com/datastax/docker-images/blob/master/studio/2.0/files/overwritable-conf-files).
 
-3. Bind mount the local directory to the exposed Volume `/conf` by starting the container with the `-v` flag.
+3. Bind mount the local directory to the exposed Volume `/config` by starting the container with the `-v` flag.
 
-   ```
-docker run -e DS_LICENSE=accept --name my-studio -p 9091:9091 -d -v /dse/conf/studio:/conf datastax/dse-studio
-   ```
+```
+docker run -e DS_LICENSE=accept --name my-studio -p 9091:9091 -d -v /dse/conf/studio:/config datastax/dse-studio
+```
 
 ### Persisting data
 
@@ -68,9 +69,10 @@ To persist data:
 1. Create a directory on the Docker host. 
 
 3. Bind mount the local directory to the exposed Volume `/var/lib/datastax-studio` by starting the container with the `-v` flag.
-   ```
+   
+```
 docker run -e DS_LICENSE=accept -d -v /dse/data/studio:/var/lib/datastax-studio datastax/dse-studio --name my-studio
-   ```
+```
 
 See [Docker volumes doc](https://docs.docker.com/engine/tutorials/dockervolumes/#mount-a-host-directory-as-a-data-volume) for more information on mounting Volumes.
 
