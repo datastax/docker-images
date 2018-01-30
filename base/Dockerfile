@@ -7,38 +7,24 @@ MAINTAINER "DataStax, Inc <info@datastax.com>"
 
 ENV DEBIAN_FRONTEND noninteractive
 
-ENV JAVA_HOME=/usr/lib/jvm/default-jvm \
-    PATH=${PATH}:/usr/lib/jvm/default-jvm/bin/
+ENV JAVA_HOME /usr/lib/jvm/java-8-oracle
+ENV JRE_HOME ${JAVA_HOME}/jre
+ENV PATH=${PATH}:/usr/lib/jvm/default-jvm/bin/
 
-RUN apt-get update && \
+RUN apt-get update && apt-get install ca-certificates curl wget \
+	-y --no-install-recommends && \
+	curl --silent --location --retry 3 --cacert /etc/ssl/certs/GeoTrust_Global_CA.pem \
+	http://repo.datastax.com/jdk-distributions/jdk-8u152-linux-x64.tar.gz \
+	| tar xz -C /tmp && \
+	mkdir -p /usr/lib/jvm && mv /tmp/jdk* "${JAVA_HOME}" && \
+	apt-get autoclean && apt-get --purge -y autoremove && \
+	rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* && \
 
-    apt-get install -y software-properties-common && \
-
-    add-apt-repository ppa:webupd8team/java -y && \
-
-    apt-get update && \
-
-    # make installation not to ask
-    echo debconf shared/accepted-oracle-license-v1-1 select true |  debconf-set-selections && \
-    echo debconf shared/accepted-oracle-license-v1-1 seen true |  debconf-set-selections && \
-
-    # install neede packages
-    apt-get install  -y --no-install-recommends ca-certificates && \
-
-    apt-get -y dist-upgrade && \
-
-    # install java
-    apt-get install -y --no-install-recommends oracle-java8-installer && \
-    apt-get install -y --no-install-recommends oracle-java8-set-default && \
-    apt-get autoremove -y && \
-
-    # remove download
-    rm -rf /var/cache/oracle-jdk8-installer && \
-
-    # fix default setting
-    ln -s java-8-oracle  /usr/lib/jvm/default-jvm && \
-
-    # remove apt cache from image
-    apt-get clean all
+    update-alternatives --install "/usr/bin/java" "java" "${JRE_HOME}/bin/java" 1 && \
+	update-alternatives --install "/usr/bin/javaws" "javaws" "${JRE_HOME}/bin/javaws" 1 && \
+	update-alternatives --install "/usr/bin/javac" "javac" "${JAVA_HOME}/bin/javac" 1 && \
+	update-alternatives --set java "${JRE_HOME}/bin/java" && \
+	update-alternatives --set javaws "${JRE_HOME}/bin/javaws" && \
+	update-alternatives --set javac "${JAVA_HOME}/bin/javac"
 
 ADD files /
