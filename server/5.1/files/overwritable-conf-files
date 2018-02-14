@@ -64,3 +64,4 @@ resources/spark/spark-jobserver/dse.conf
 resources/spark/conf/docker.properties.template
 .cassandra/cqlshrc
 .dserc
+../agent/conf/datastax-agent-env.sh
