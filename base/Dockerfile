@@ -11,7 +11,7 @@ ENV JAVA_HOME /usr/lib/jvm/java-8-oracle
 ENV JRE_HOME ${JAVA_HOME}/jre
 ENV PATH=${PATH}:/usr/lib/jvm/default-jvm/bin/
 
-RUN apt-get update && apt-get install ca-certificates curl wget \
+RUN apt-get update && apt-get install ca-certificates curl wget sysstat \
 	-y --no-install-recommends && \
 	curl --silent --location --retry 3 --cacert /etc/ssl/certs/GeoTrust_Global_CA.pem \
 	http://repo.datastax.com/jdk-distributions/jdk-8u152-linux-x64.tar.gz \
