@@ -23,6 +23,8 @@ mkdir -p /var/log/spark/master
 
 IP_ADDRESS="$(hostname --ip-address)"
 CASSANDRA_CONFIG="${DSE_HOME}/resources/cassandra/conf/cassandra.yaml"
+CASSANDRA_ENV_CONFIG="${DSE_HOME}/resources/cassandra/conf/cassandra-env.sh"
+
 
 # SNITCH sets the snitch this node will use. Use GossipingPropertyFileSnitch if not set
 : ${SNITCH=GossipingPropertyFileSnitch}
@@ -55,6 +57,16 @@ fi
 
 # Replace the default seeds setting in cassandra.yaml
 sed -ri 's/(- seeds:).*/\1 "'"$SEEDS"'"/' "$CASSANDRA_CONFIG"
+
+# Update settings in cassandra-env.sh based on the ENV variable values
+for name in MAX_HEAP_SIZE \
+; do
+    var="${name^^}"
+    val="${!var}"
+    if [ "$val" ]; then
+      sed -ri 's/^(#)?('"$name"'=).*/\2"'"$val"'"/' "$CASSANDRA_ENV_CONFIG"
+    fi
+done
 
 # Update the following settings in the cassandra.yaml file based on the ENV variable values
 for name in \
