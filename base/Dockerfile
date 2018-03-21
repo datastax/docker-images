@@ -10,6 +10,7 @@ ENV DEBIAN_FRONTEND noninteractive
 ENV JAVA_HOME /usr/lib/jvm/java-8-oracle
 ENV JRE_HOME ${JAVA_HOME}/jre
 ENV PATH=${PATH}:/usr/lib/jvm/default-jvm/bin/
+ENV LANG=en_US.UTF-8
 
 RUN apt-get update && apt-get install ca-certificates curl wget sysstat \
 	-y --no-install-recommends && \
