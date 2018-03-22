@@ -314,21 +314,20 @@ To create and connect the containers:
 
 1. First create an OpsCenter container.
 
- ```
-docker run -e DS_LICENSE=accept -d -p 8888:8888 --name my-opscenter
+```
+docker run -e DS_LICENSE=accept -p 8888:8888 --name my-opscenter -d datastax/dse-opscenter
 ```
 See [OpsCenter Docker run options](#OpsCenter-Docker-run-options) for additional options that persist data or manage configuration.
 
 2. Create a [DataStax Enterprise (DSE) server](https://store.docker.com/images/datastax) container that is linked to the OpsCenter container. 
 
- ```
+```
 docker run -e DS_LICENSE=accept --link my-opscenter:opscenter --name my-dse -d store/datastax/dse-server:5.1.5
 ```
 
 3. Get the DSE container IP address:
 
- 
- ```
+```
 docker exec -it my-dse nodetool status
 ```
 
