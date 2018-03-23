@@ -10,9 +10,9 @@ ENV DEBIAN_FRONTEND noninteractive
 ENV JAVA_HOME /usr/lib/jvm/java-8-oracle
 ENV JRE_HOME ${JAVA_HOME}/jre
 ENV PATH=${PATH}:/usr/lib/jvm/default-jvm/bin/
-ENV LANG=en_US.UTF-8
 
-RUN apt-get update && apt-get install ca-certificates curl wget sysstat \
+
+RUN apt-get update && apt-get install ca-certificates curl wget sysstat locales \
 	-y --no-install-recommends && \
 	curl --silent --location --retry 3 --cacert /etc/ssl/certs/GeoTrust_Global_CA.pem \
 	http://repo.datastax.com/jdk-distributions/jdk-8u152-linux-x64.tar.gz \
@@ -27,5 +27,11 @@ RUN apt-get update && apt-get install ca-certificates curl wget sysstat \
 	update-alternatives --set java "${JRE_HOME}/bin/java" && \
 	update-alternatives --set javaws "${JRE_HOME}/bin/javaws" && \
 	update-alternatives --set javac "${JAVA_HOME}/bin/javac"
+	
+# set the locale of the container:
+RUN locale-gen en_US.UTF-8
+ENV LC_ALL=en_US.UTF-8
+ENV LANG=en_US.UTF-8
+ENV LANGUAGE=en_US.UTF-8
 
 ADD files /
