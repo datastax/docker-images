@@ -6,7 +6,7 @@
 * [Prerequisites](#prerequisites)
 * [Next Steps](next-steps)
 * [Building](#building)
-* [GQuick Reference](#quick-reference )
+* [Quick Reference](#quick-reference )
 * [Licensing](#license)
 
 # Quick Reference 
