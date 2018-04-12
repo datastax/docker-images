@@ -1,7 +1,7 @@
 version: '2'
 services:
   seed_node:
-    image: "store/datastax/dse-server:5.1.5"
+    image: "datastax/dse-server"
     environment:
       - DS_LICENSE=accept
     # Allow DSE to lock memory with mlock
@@ -10,7 +10,7 @@ services:
     ulimits:
       memlock: -1
   node:
-    image: "store/datastax/dse-server:5.1.5"
+    image: "datastax/dse-server"
     environment:
       - DS_LICENSE=accept
       - SEEDS=seed_node
