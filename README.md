@@ -1,4 +1,4 @@
-Git Hub Page
+# We are now on DOCKER HUB
 
 # Contents
 * [DataStax Platform Overview](#datastax-platform-overview)
