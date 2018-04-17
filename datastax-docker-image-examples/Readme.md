@@ -4,6 +4,7 @@ This is a resource listing examples of how the DataStax docker images are being 
 
 Please send a pull request if you want us to showcase your examples and we will add you to the list.
 
+* Killr video examples using DSE Docker: https://github.com/KillrVideo
 * LDAP with DSE Docker: https://github.com/jphaugla/datastaxLDAPDocker
 * Encryption with DSE Docker: https://github.com/jphaugla/datastaxEncryptDocker
 * Streamsets with DSE Docker: https://github.com/jphaugla/datastaxStreamsetsDocker
