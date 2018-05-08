@@ -24,9 +24,9 @@ mkdir -p /var/log/spark/master
 IP_ADDRESS="$(hostname --ip-address)"
 CASSANDRA_CONFIG="${DSE_HOME}/resources/cassandra/conf/cassandra.yaml"
 
-# RPC_ADDRESS is where we listen for drivers/clients to connect to us. Setting to 0.0.0.0 by default is fine
-# since we'll be specifying the BROADCAST_RPC_ADDRESS below
-: ${RPC_ADDRESS='0.0.0.0'}
+# NATIVE_TRANSPORT_ADDRESS is where we listen for drivers/clients to connect to us. Setting to 0.0.0.0 by default is fine
+# since we'll be specifying the NATIVE_TRANSPORT_BROADCAST_ADDRESS below
+: ${NATIVE_TRANSPORT_ADDRESS='0.0.0.0'}
 
 # LISTEN_ADDRESS is where we listen for other nodes who want to communicate. 'auto' is not a valid value here,
 # so use the hostname's IP by default
@@ -44,7 +44,6 @@ fi
 
 # By default, tell drivers/clients to use the same address that other nodes are using to communicate with us
 : ${NATIVE_TRANSPORT_BROADCAST_ADDRESS=$BROADCAST_ADDRESS}
-: ${NATIVE_TRANSPORT_ADDRESS=$BROADCAST_ADDRESS}
 
 # SEEDS is for other nodes in the cluster we know about. If not set (because we're the only node maybe), just
 # default to ourself
