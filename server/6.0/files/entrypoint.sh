@@ -23,6 +23,10 @@ mkdir -p /var/log/spark/master
 
 IP_ADDRESS="$(hostname --ip-address)"
 CASSANDRA_CONFIG="${DSE_HOME}/resources/cassandra/conf/cassandra.yaml"
+CASSANDRA_RACK_CONFIG="${DSE_HOME}/resources/cassandra/conf/cassandra-rackdc.properties"
+
+# SNITCH sets the snitch this node will use. Use GossipingPropertyFileSnitch if not set
+: ${SNITCH=GossipingPropertyFileSnitch}
 
 # NATIVE_TRANSPORT_ADDRESS is where we listen for drivers/clients to connect to us. Setting to 0.0.0.0 by default is fine
 # since we'll be specifying the NATIVE_TRANSPORT_BROADCAST_ADDRESS below
@@ -49,33 +53,45 @@ fi
 # default to ourself
 : ${SEEDS:="$BROADCAST_ADDRESS"}
 
-# Replace the default seeds setting in cassandra.yaml
-sed -ri 's/(- seeds:).*/\1 "'"$SEEDS"'"/' "$CASSANDRA_CONFIG"
+# modify cassandra.yaml only if not linked externally
+if should_auto_configure "$CASSANDRA_CONFIG" ; then
+    echo "Applying changes to $CASSANDRA_CONFIG ..."
 
-# Update the following settings in the cassandra.yaml file based on the ENV variable values
-for name in \
-    broadcast_address \
-    native_transport_broadcast_address \
-    cluster_name \
-    listen_address \
-    num_tokens \
-    native_transport_address \
-    start_native_transport \
-    ; do
-    var="${name^^}"
-    val="${!var}"
-    if [ "$val" ]; then
-      sed -ri 's/^(# )?('"$name"':).*/\2 '"$val"'/' "$CASSANDRA_CONFIG"
-    fi
-done
+    sed -ri 's/(endpoint_snitch:).*/\1 '"$SNITCH"'/' "$CASSANDRA_CONFIG"
 
-for rackdc in dc rack; do
-    var="${rackdc^^}"
-    val="${!var}"
-    if [ "$val" ]; then
-        sed -ri 's/^('"$rackdc"'=).*/\1 '"$val"'/' "${DSE_HOME}/resources/cassandra/conf/cassandra-rackdc.properties"
-    fi
-done
+    # Replace the default seeds setting in cassandra.yaml
+    sed -ri 's/(- seeds:).*/\1 "'"$SEEDS"'"/' "$CASSANDRA_CONFIG"
+
+    # Update the following settings in the cassandra.yaml file based on the ENV variable values
+    for name in \
+        broadcast_address \
+        native_transport_broadcast_address \
+        cluster_name \
+        listen_address \
+        num_tokens \
+        native_transport_address \
+        start_native_transport \
+        ; do
+        var="${name^^}"
+        val="${!var}"
+        if [ "$val" ]; then
+          sed -ri 's/^(# )?('"$name"':).*/\2 '"$val"'/' "$CASSANDRA_CONFIG"
+        fi
+    done
+    echo "done."
+fi
+
+if should_auto_configure "$CASSANDRA_RACK_CONFIG" ; then
+    echo "Applying changes to $CASSANDRA_RACK_CONFIG ..."
+    for rackdc in dc rack; do
+        var="${rackdc^^}"
+        val="${!var}"
+        if [ "$val" ]; then
+            sed -ri 's/^('"$rackdc"'=).*/\1 '"$val"'/' "$CASSANDRA_RACK_CONFIG"
+        fi
+    done
+    echo "done."
+fi
 
 [ -z "$OPSCENTER_IP" ] && OPSCENTER_IP=$(getent hosts opscenter | awk '{ print $1 }')
 if [ ! -z "$OPSCENTER_IP" ]; then
