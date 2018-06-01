@@ -45,10 +45,9 @@ On Academy you’ll also find step by step tutorials and examples.
 
 # Building
 
-The code in this repository will build the images listed above. To build all of them please run the following commands:
+The code in this repository will build the images listed above. To build all of them please run the following command specifying the Version for each image:
 
-```console
-./gradlew buildImages -PdownloadUsername=<your_DataStax_Acedemy_username> -PdownloadPassword=<your_DataStax_Acedemy_passwd>
+```./gradlew buildServerImage -PserverVersion=6.0 -PopscenterVersion=6.5 -PstudioVersion=6.0./gradlew buildImages -PdownloadUsername=<your_DataStax_Acedemy_username> -PdownloadPassword=<your_DataStax_Acedemy_passwd>
 ```
 
 By default, [Gradle](https://gradle.org) will download DataStax tarballs from [DataStax Academy](https://downloads.datastax.com).
