@@ -1,0 +1,43 @@
+
+# Maximum number of items returned per cell execution. Additional items will be truncated.
+# Unit: count / number of items
+resultSizeLimit: 1000
+
+# Maximum size of a cell result. If a cell result exceeds this size then the cell execution will fail.
+# Unit: bytes
+maxResultSizeBytes: 524288
+
+# Cell execution timeout. A value of 0 indicates no timeout and will depend on the DSE server timeouts configured in dse.yaml.
+# Unit: miliseconds
+executionTimeoutMs: 0
+
+# TraversalSource mapping for real-time and analytic execution engines. These values correspond to the traversal sources
+# configured in dse.yaml.
+# Unit: string
+traversalSources:
+  realTimeTraversalSource: g
+  analyticTraversalSource: a
+
+# This refers to the datastax-studio server
+server:
+ httpPort: 9091
+ # WARNING!!! Changing this setting from the default(localhost) could pose a security risk as other users on external machines could then
+ # gain access to notebooks and the clusters those are connected to.
+ # Studio is designed to be used as a desktop application, but if deploying centrally you should be aware of the potential security risks.
+ # Please visit http://docs.datastax.com/en/latest-studio/studio/reference/configuration.html for information on configuration
+ httpBindAddress: localhost
+
+logging:
+ fileName: studio.log
+ maxLogFileSize: 250 MB
+ maxFiles: 10
+ directory: ./logs
+
+# User data being, where we store data specific to a user
+# in the application.  For the short-term this is the file system, which
+# is why we need to explicitly configure a location
+userData:
+  # defaults to a .datastax_studio folder in your home directory, such as  ~/.datastax_studio
+  # set to a non-null value to override
+  baseDirectory: null
+

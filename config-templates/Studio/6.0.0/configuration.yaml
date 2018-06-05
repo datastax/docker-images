@@ -1,0 +1,59 @@
+
+
+# Maximum number of items returned per cell execution. Additional results are truncated.
+# Unit: count / number of items
+resultSizeLimit: 1000
+
+# Maximum size of a cell result. Cell execution fails when a cell result exceeds this size.
+# Unit: bytes
+maxResultSizeBytes: 524288
+
+# Cell execution timeout. A value of 0 indicates no Studio-specific timeout is applied. Instead, use the DSE server timeouts that are configured in dse.yaml.
+# Unit: milliseconds
+executionTimeoutMs: 0
+
+# Options to configure the Studio web server.
+server:
+ httpPort: 9091
+ # WARNING: Changing the setting from the default (localhost) can pose a security risk as other users on external machines can gain access to notebooks and
+ # the DSE clusters those notebooks are connected to.
+ # Studio is designed to be used as a desktop application. Distributed deployment introduces potential security risks.
+ # See https://docs.datastax.com/en/dse/6.0/dse-dev/datastax_enterprise/studio/configStudio.html for information on configuration.
+ httpBindAddress: localhost
+
+# Studio logging options.
+logging:
+ fileName: studio.log
+ maxLogFileSize: 250 MB
+ maxFiles: 10
+ directory: ./logs
+ # Spark SQL log level
+ # 0: Disable all logging
+ # 1: Log severe error events that cause the driver to stop
+ # 2: Log errors that may allow driver to continue
+ # 3: Log events that might results in an error
+ # 4: Log general driver progress information
+ # 5: Log detailed driver debug information
+ # 6: Log all driver activity
+ sparkSQLLogLevel: 0
+
+# The path to the local file system where user data is stored.
+userData:
+  # Defaults to .datastax_studio folder in your home directory, such as  ~/.datastax_studio
+  # Set to a non-null value to override.
+  baseDirectory: null
+  # Time interval between revision saves when only minor changes are made. For example, revision cell code and settings changes. Major changes, such as
+  # executing a cell and getting a new result, always create a revision history unless the result is identical to the prior values.
+  historySaveFrequencyInSeconds: 300
+  # Directory to store notebooks revisions that can be restored. Path is relative to 'baseDirectory' (specified above).
+  historyDirectory: history
+  # Enable Gzip compression of history files.
+  compressHistoryFiles: true
+  # Enable pruning of history revisions. When there are more than "minHistoryRevisionsToKeep"
+  # history revisions, revisions older than "maxDaysOfHistoryToKeep" days are deleted.
+  pruneRevisionHistoryEnabled: true
+  # Maximum number of days to retain history revisions.
+  maxDaysOfHistoryToKeep: 30
+  # Minimum number of revisions to retain before pruning by date is enforced.
+  minHistoryRevisionsToKeep: 25
+
