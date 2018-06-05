@@ -1,0 +1,1 @@
+JVM_OPTS="$JVM_OPTS -Xmx128M"
