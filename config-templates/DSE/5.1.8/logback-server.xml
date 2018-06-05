@@ -1,0 +1,62 @@
+<!--
+  ~ Copyright DataStax, Inc.
+  ~
+  ~ Please see the included license file for details.
+  -->
+
+<configuration>
+  <appender name="STDERR" class="ch.qos.logback.core.ConsoleAppender">
+    <target>System.err</target>
+    <encoder>
+      <pattern>%-6cn %5p %X{service} %d{ISO8601} %lo{10} \(%F:%L\) %m%n</pattern>
+    </encoder>
+    <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+      <level>INFO</level>
+    </filter>
+  </appender>
+
+  <appender name="SIFT" class="ch.qos.logback.classic.sift.SiftingAppender">
+    <!-- in the absence of the class attribute, it is assumed that the
+         desired discriminator type is
+         ch.qos.logback.classic.sift.MDCBasedDiscriminator -->
+    <discriminator class="com.datastax.bdp.logback.MarkerBasedDiscriminator">
+      <key>TEST_LOG_FILE</key>
+    </discriminator>
+    <sift>
+      <appender name="FILE-${TEST_LOG_FILE}" class="com.datastax.bdp.logback.BufferedFileAppender">
+
+        <encoder>
+          <pattern>%-6cn %5p %X{service} [%t] %d{ISO8601} %lo{10} \(%F:%L\) %m%n</pattern>
+          <immediateFlush>false</immediateFlush>
+        </encoder>
+
+        <file>build/test/logs/${TEST_LOG_FILE}</file>
+        <append>true</append>
+        <bufferSize>65536</bufferSize>
+
+      </appender>
+    </sift>
+    <timeout>20 minutes</timeout>
+  </appender>
+
+  <!--
+  Enable receiving log events from other JVM and log them
+  through the above defined logging infrastructure. Listen on port 12345
+  -->
+  <receiver class="ch.qos.logback.classic.net.server.ServerSocketReceiver">
+    <port>12346</port>
+  </receiver>
+
+  <root level="TRACE">
+    <appender-ref ref="SIFT"/>
+  </root>
+
+  <logger name="com.datastax.bdp.test.ng" level="DEBUG">
+    <appender-ref ref="STDERR"/>
+  </logger>
+
+  <logger name="ch.qos.logback.classic" level="WARN">
+    <appender-ref ref="STDERR"/>
+  </logger>
+
+</configuration>
