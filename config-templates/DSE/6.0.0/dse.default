@@ -1,0 +1,57 @@
+# NOTICE: See also /etc/dse/cassandra/cassandra-env.sh
+
+# EXTRA_CLASSPATH provides the means to extend Cassandra's classpath with
+# additional libraries.  It is formatted as a colon-delimited list of
+# class directories and/or jar files.  For example, to enable the
+# JMX-to-web bridge install libmx4j-java and uncomment the following.
+#EXTRA_CLASSPATH="/usr/share/java/mx4j-tools.jar"
+
+# Enable the DSE Graph service on this node
+GRAPH_ENABLED=0
+
+# Start the node in DSE Search mode
+SOLR_ENABLED=0
+
+# Start the node in Spark mode
+SPARK_ENABLED=0
+
+# Determine install root location (applicable for standalone installer or
+# Debian/RedHat packages; not used in tarball installs)
+if [ -d /usr/share/dse ]; then
+    export DSE_HOME=/usr/share/dse
+fi
+# Set this if you've installed to a location different from the default
+#DSE_HOME=your_install_location
+
+# Location of log output
+OUTPUT_FILE="/var/log/cassandra/output.log"
+
+# Configuration directory
+CASSANDRA_CONF=/etc/dse/cassandra
+
+# Set the PID file location here
+PIDFILE=/var/run/$NODEID/$NODEID.pid
+
+# Where do Hadoop log files go? This will override the default
+#HADOOP_LOG_DIR=
+
+# Where do Tomcat log files go? This will override the default
+#TOMCAT_LOGS=
+
+# The user to use for the service
+CASSANDRA_USER=cassandra
+
+# The group to use for the service
+CASSANDRA_GROUP=cassandra
+
+# Set this if you've installed DSE into a different location from the default
+# (Note: this refers to DSE Spark, not open-source Spark)
+#SPARK_HOME=your_spark_install_location
+
+# Spark configuration files location
+SPARK_CONF_DIR=/etc/dse/spark
+
+# Uncomment and increase/decrease if you want longer/shorter waits checking if the service is up
+# WAIT_FOR_START=3
+# Uncomment and decrease/increase if you want finer/coarser grained waits while checking if the service is up
+# WAIT_FOR_START_SLEEP=5
