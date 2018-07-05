@@ -45,15 +45,34 @@ On Academy you’ll also find step by step tutorials and examples.
 
 # Building
 
-The code in this repository will build the images listed above. To build all of them please run the following command specifying the Version for each image:
-
-```
-./gradlew buildServerImage -PserverVersion=6.0 -PopscenterVersion=6.5 -PstudioVersion=6.0./gradlew buildImages -PdownloadUsername=<your_DataStax_Acedemy_username> -PdownloadPassword=<your_DataStax_Acedemy_passwd>
-```
+The code in this repository will build the DSE, Opscenter and Studio Docker images. To get started, clone this repo and modify for your requirements. DataStax uses gradle to build these images.
 
 By default, [Gradle](https://gradle.org) will download DataStax tarballs from [DataStax Academy](https://downloads.datastax.com).
 Therefore you need to provide your credentials either via the command line, or in `gradle.properties` file located
 in the project root.
+
+DataStax uses two separate Dockerfiles to build the individual images, a base for the OS and individual Dockerfiles for (server, opscenter, studio).  
+
+If you would like to customize the OS, install additional packages etc, you would modify the base Dockerfile. 
+
+If you would like to customize DSE, Opscenter or Studio you would modify their corresponding Dockerfile. 
+For example: if you wanted to build DSE 5.1.10 with datastax-agent 6.1.4, you would modify the server 5.1 Dockerfile with
+
+```
+ARG VERSION=5.1.10
+ARG DSE_AGENT_VERSION=6.1.4
+```
+
+To build specific versions of OpsCenter and Studio, you would modify `ARG VERSION=` in their corresponding Dockerfile.
+
+Currently you have to build all 3 images
+
+To build the images from your customized Dockerfile(s) run the following command specifying the Version branch for each image: 
+For example to build DSE 5.1.10 with OpsCenter 6.1.4 and Studio 2.0 you would run the following adding your DataStax Academy Credentials
+
+```
+./gradlew buildServerImage -PserverVersion=5.1 -PopscenterVersion=6.1 -PstudioVersion=2.0./gradlew buildImages -PdownloadUsername=<your_DataStax_Acedemy_username> -PdownloadPassword=<your_DataStax_Acedemy_passwd>
+```
 
 Run `./gradlew tasks` to get the list of all available tasks.
 
