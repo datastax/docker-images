@@ -45,7 +45,9 @@ On Academy you’ll also find step by step tutorials and examples.
 
 # Building
 
-The code in this repository will build the DSE, Opscenter and Studio Docker images. To get started, clone this repo and modify for your requirements. DataStax uses gradle to build these images.
+The code in this repository will build the DSE, Opscenter and Studio Docker images. To get started, clone this repo and modify for your requirements. 
+
+This repo uses Gradle to build the images.
 
 By default, [Gradle](https://gradle.org) will download DataStax tarballs from [DataStax Academy](https://downloads.datastax.com).
 Therefore you need to provide your credentials either via the command line, or in `gradle.properties` file located
