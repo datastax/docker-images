@@ -15,6 +15,9 @@ ARG DSE_AGENT_VERSION=6.1.6
 ARG DSE_AGENT_TARBALL=datastax-agent-${DSE_AGENT_VERSION}.tar.gz
 ARG DSE_AGENT_DOWNLOAD_URL=${URL_PREFIX}/${DSE_AGENT_TARBALL}
 
+ARG JTS_VERSION=1.15.1
+ARG SPATIAL4J_VERSION=0.7
+
 ENV DSE_HOME /opt/dse
 ENV DSE_AGENT_HOME /opt/agent
 
@@ -41,6 +44,9 @@ RUN set -x \
 # Unpack tarball
     && tar -C "$DSE_HOME" --strip-components=1 -xzf /${DSE_TARBALL} \
     && rm /${DSE_TARBALL} \
+    && rm -f ${DSE_HOME}/resources/solr/lib/spatial4j-0.6.jar \
+    && wget -q -O ${DSE_HOME}/resources/solr/lib/spatial4j-${SPATIAL4J_VERSION}.jar http://central.maven.org/maven2/org/locationtech/spatial4j/spatial4j/${SPATIAL4J_VERSION}/spatial4j-${SPATIAL4J_VERSION}.jar \
+    && wget -q -O ${DSE_HOME}/resources/solr/lib/jts-core-${JTS_VERSION}.jar http://central.maven.org/maven2/org/locationtech/jts/jts-core/${JTS_VERSION}/jts-core-${JTS_VERSION}.jar \
     && chown -R dse:dse ${DSE_HOME} \
 # Download Agent tarball if needed
     && if test ! -e /${DSE_AGENT_TARBALL}; then wget -q -O /${DSE_AGENT_TARBALL} ${DSE_AGENT_DOWNLOAD_URL} ; fi \
