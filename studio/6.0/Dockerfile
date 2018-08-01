@@ -7,7 +7,7 @@ FROM dse-base
 MAINTAINER "DataStax, Inc <info@datastax.com>"
 
 # Get commandline parameters
-ARG VERSION=6.0.0
+ARG VERSION=6.0.1
 ARG URL_PREFIX=http://localhost
 ARG STUDIO_TARBALL=datastax-studio-${VERSION}.tar.gz
 ARG STUDIO_DOWNLOAD_URL=${URL_PREFIX}/${STUDIO_TARBALL}
