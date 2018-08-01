@@ -14,11 +14,6 @@ ARG OPSCENTER_DOWNLOAD_URL=${URL_PREFIX}/${OPSCENTER_TARBALL}
 # Set up configuration variables
 ENV OPSCENTER_HOME=/opt/opscenter
 
-RUN set -x \
-# Add Opscenter  user
-    && groupadd -r opscenter --gid=998 \
-    && useradd -m -d "$OPSCENTER_HOME" -r -g opscenter --uid=998 opscenter
-
 # Install missing packages
 RUN apt-get update -qq \
     && apt-get install -y python2.7 \
@@ -33,8 +28,11 @@ RUN apt-get update -qq \
                           ntp \
                           tree \
     && apt-get clean autoclean autoremove --yes \
-    && rm -rf /var/lib/{apt,dpkg,cache,log}/
+    && rm -rf /var/lib/{apt,dpkg,cache,log}/ \
 
+# Add Opscenter  user
+    && groupadd -r opscenter --gid=998 \
+    && useradd -m -d "$OPSCENTER_HOME" -r -g opscenter --uid=998 opscenter 
 
 # Copy any special files into the image
 COPY files /
