@@ -20,7 +20,7 @@ RUN apt-get update && apt-get install ca-certificates curl wget sysstat locales 
 	mkdir -p /usr/lib/jvm && mv /tmp/jdk* "${JAVA_HOME}" && \
 	apt-get autoclean && apt-get --purge -y autoremove && \
 	rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* && \
-
+        \
     update-alternatives --install "/usr/bin/java" "java" "${JRE_HOME}/bin/java" 1 && \
 	update-alternatives --install "/usr/bin/javaws" "javaws" "${JRE_HOME}/bin/javaws" 1 && \
 	update-alternatives --install "/usr/bin/javac" "javac" "${JAVA_HOME}/bin/javac" 1 && \
