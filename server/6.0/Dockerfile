@@ -6,12 +6,12 @@ FROM dse-base
 
 MAINTAINER "DataStax, Inc <info@datastax.com>"
 
-ARG VERSION=6.0.1
+ARG VERSION=6.0.2
 ARG URL_PREFIX=http://localhost
 ARG DSE_TARBALL=dse-${VERSION}-bin.tar.gz
 ARG DSE_DOWNLOAD_URL=${URL_PREFIX}/${DSE_TARBALL}
 
-ARG DSE_AGENT_VERSION=6.5.0
+ARG DSE_AGENT_VERSION=6.5.2
 ARG DSE_AGENT_TARBALL=datastax-agent-${DSE_AGENT_VERSION}.tar.gz
 ARG DSE_AGENT_DOWNLOAD_URL=${URL_PREFIX}/${DSE_AGENT_TARBALL}
 
@@ -25,9 +25,8 @@ RUN set -x \
 
 # Install missing packages
 RUN set -x \
-    && export DEBIAN_FRONTEND=noninteractive \
     && apt-get update -qq \
-    && apt-get install -y python adduser lsb-base procps gzip zlib1g wget debianutils libaio1 \
+    && apt-get install -y python adduser lsb-base procps gzip zlib1g wget debianutils libaio1 sudo \
     && apt-get remove -y python3 \
     && apt-get autoremove --yes \
     && apt-get clean all \
