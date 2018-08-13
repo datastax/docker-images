@@ -1,3 +1,4 @@
+#!/usr/bin/env bash
 ############################################
 # Replace files listed in /overwritable-conf-files
 # if their counterparts exist in /config folder
@@ -10,35 +11,36 @@ function link_external_config {
         ext_conf_file="/config/$(basename "$conf_file")"
         embedded_conf_file="${1}/${conf_file}"
         if [ -f "$ext_conf_file" ]; then
-            echo "Linking $embedded_conf_file to $ext_conf_file"
             mkdir -p "$(dirname "$embedded_conf_file")"
             ln -sf "$ext_conf_file" "$embedded_conf_file"
+            echo "INFO: Linked $embedded_conf_file to $ext_conf_file"
             linkedExternalConf["$embedded_conf_file"]="$ext_conf_file"
         fi
     done
 }
 
-function is_external_file {
-
-    MP="$(df --output=target "$1" | tail -n +2)"
-    if [ "$MP" != "/" ] && grep -q "^Users $MP" /proc/mounts ; then
-        echo "$1 mount point is $MP"
-        true
-    else
-        false
-    fi
-}
-
 function should_auto_configure {
 
     if [ ! -z "$DSE_AUTO_CONF_OFF" ]; then
-        false
+        case "$DSE_AUTO_CONF_OFF" in
+            all)
+                echo "INFO: skipping auto configuration of $1 due to presence of DSE_AUTO_CONF_OFF env variable"
+                false
+                ;;
+            *)
+                found=0
+                for f in $(echo "$DSE_AUTO_CONF_OFF" | tr "," "\n") ; do
+                    if [ $(basename $1) == "$f" ]; then
+                        echo "INFO: skipping auto configuration of $1 due to its presence in DSE_AUTO_CONF_OFF env variable"
+                        found=1
+                        break
+                    fi
+                done
+                [ $found == 0 ]
+                ;;
+        esac
     else
-        if is_external_file "$1" ; then
-            false
-        else
-            true
-        fi
+        true
     fi
 }
 
