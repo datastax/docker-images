@@ -5,6 +5,7 @@
 * [Getting Started with DataStax and Docker](#getting-started-with-datastax-and-docker)
 * [Prerequisites](#prerequisites)
 * [Next Steps](#next-steps)
+* [Quick Start Examples](#quick-start-examples)
 * [Building](#building)
 * [Quick Reference](#quick-reference )
 * [Licensing](#license)
@@ -39,9 +40,16 @@ DataStax Docker images are licensed only for Development purposes in non-product
 
 # Quick start examples
 Create a DSE database container
-`docker run -e DS_LICENSE=accept --name my-dse -d datastax/dse-server`
+
+```
+docker run -e DS_LICENSE=accept --name my-dse -d datastax/dse-server
+```
+
 Create a DSE container with Analytics, Search, and Graph enabled
-`docker run -e DS_LICENSE=accept --name my-dse -d datastax/dse-server -k -s -g`
+
+```
+docker run -e DS_LICENSE=accept --name my-dse -d datastax/dse-server -k -s -g
+```
 
 # Next Steps
 
