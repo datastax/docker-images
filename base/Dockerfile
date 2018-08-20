@@ -1,7 +1,7 @@
 # Copyright DataStax, Inc, 2017
 #   Please review the included LICENSE file for more information.
 #
-FROM openjdk:8u171-jdk-stretch
+FROM openjdk:8u171-jdk-slim-stretch
 
 MAINTAINER "DataStax, Inc <info@datastax.com>"
 
