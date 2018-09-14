@@ -48,7 +48,7 @@ RUN set -x \
     && rm /${DSE_AGENT_TARBALL} \
     && chown -R dse:dse ${DSE_AGENT_HOME} \
 # Create folders
-    && (for dir in /var/lib/cassandra /var/lib/spark /var/lib/dsefs /var/log/cassandra /var/log/spark /config ; do \
+    && (for dir in /var/lib/cassandra /var/lib/spark /var/lib/dsefs /var/lib/datastax-agent /var/log/cassandra /var/log/spark /config ; do \
         mkdir -p $dir && chown -R dse:dse $dir && chmod 777 $dir ; \
     done )
 
