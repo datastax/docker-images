@@ -59,7 +59,7 @@ WORKDIR $HOME
 USER dse
 
 # Expose DSE folders
-VOLUME ["/var/lib/cassandra", "/var/lib/spark", "/var/lib/dsefs", "/var/log/cassandra", "/var/log/spark", "/opt/dse/resources"]
+VOLUME ["/var/lib/cassandra", "/var/lib/spark", "/var/lib/dsefs", "/var/log/cassandra", "/var/log/spark"]
 
 # CASSANDRA PORTS (INTRA-NODE, TLS INTRA-NODE, JMX, CQL, THRIFT, DSEFS INTRA-NODE, INTRA-NODE MESSAGING SERVICE)
 EXPOSE 7000 7001 7199 8609 9042 9160
