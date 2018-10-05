@@ -6,7 +6,7 @@ FROM dse-base
 
 MAINTAINER "DataStax, Inc <info@datastax.com>"
 
-ARG VERSION=6.0.3
+ARG VERSION=6.0.4
 ARG URL_PREFIX=http://localhost
 ARG DSE_TARBALL=dse-${VERSION}-bin.tar.gz
 ARG DSE_DOWNLOAD_URL=${URL_PREFIX}/${DSE_TARBALL}
