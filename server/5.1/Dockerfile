@@ -49,9 +49,11 @@ RUN set -x \
     && rm /${DSE_AGENT_TARBALL} \
     && chown -R dse:dse ${DSE_AGENT_HOME} \
 # Create folders
-    && (for dir in /var/lib/cassandra /var/lib/spark /var/lib/dsefs /var/lib/datastax-agent /var/log/cassandra /var/log/spark /config ; do \
+    && (for dir in /var/lib/cassandra /var/lib/spark /var/lib/spark/worker  /var/lib/spark/rdd /var/lib/dsefs /var/lib/datastax-agent /var/log/cassandra /var/log/spark /var/log/spark/worker /var/log/spark/master /config ; do \
         mkdir -p $dir && chown -R dse:dse $dir && chmod 777 $dir ; \
-    done )
+    done ) \
+# Comment out Assistive Technologies to run the grimlin console from docker exec
+    && sed -i -e '/^assistive_technologies=/s/^/#/' /etc/java-*-openjdk/accessibility.properties
 
 ENV PATH $DSE_HOME/bin:$PATH
 ENV HOME $DSE_HOME

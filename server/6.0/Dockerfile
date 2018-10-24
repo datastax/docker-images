@@ -48,9 +48,11 @@ RUN set -x \
     && rm /${DSE_AGENT_TARBALL} \
     && chown -R dse:dse ${DSE_AGENT_HOME} \
 # Create folders
-    && (for dir in /var/lib/cassandra /var/lib/spark /var/lib/dsefs /var/lib/datastax-agent /var/log/cassandra /var/log/spark /config ; do \
+    && (for dir in /var/lib/cassandra /var/lib/spark /var/lib/spark/worker  /var/lib/spark/rdd /var/lib/dsefs /var/lib/datastax-agent /var/log/cassandra /var/log/spark /var/log/spark/worker /var/log/spark/master /config ; do \
         mkdir -p $dir && chown -R dse:dse $dir && chmod 777 $dir ; \
-    done )
+    done ) \
+# Comment out Assistive Technologies to run the grimlin console from docker exec
+    && sed -i -e '/^assistive_technologies=/s/^/#/' /etc/java-*-openjdk/accessibility.properties
 
 ENV PATH $DSE_HOME/bin:$PATH
 ENV HOME $DSE_HOME
@@ -68,7 +70,7 @@ EXPOSE 7000 7001 7199 8609 9042 9160
 EXPOSE 8983 8984
 
 # DSE ANALYTICS (SPARK)
-EXPOSE 4040 7077 7080 7081 8090 9999 18080
+EXPOSE 4040 7077 7080 7081 8090 9999 10000 18080
 
 # DSE GRAPH
 EXPOSE 8182
