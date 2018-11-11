@@ -77,5 +77,8 @@ EXPOSE 8182
 # DSEFS
 EXPOSE 5598 5599
 
+# SSH for import from OpsCenter
+EXPOSE 22
+
 # Run DSE in foreground by default
 ENTRYPOINT [ "/entrypoint.sh", "dse", "cassandra", "-f" ]
