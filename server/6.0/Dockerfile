@@ -76,5 +76,8 @@ EXPOSE 8182
 # DSEFS
 EXPOSE 5598 5599
 
+# Datastax agent (opscenter->datastax agent)
+EXPOSE 61621
+
 # Run DSE in foreground by default
 ENTRYPOINT [ "/entrypoint.sh", "dse", "cassandra", "-f" ]
