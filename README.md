@@ -9,7 +9,7 @@
 * [Creating an OpsCenter Container](#creating-an-opscenter-container)
 * [Creating a Studio Container](#creating-a-studio-container)
 * [Building](#building)
-* [Docker Configuration Tips and Tricks](#docker-configuration-tips-and-tricks)
+* [OSX Caveats](#osx-caveats)
 * [Licensing](#license)
 
 The DataStax base image now uses OpenJDK.  Previously we were building with Oracle JDK.  Starting with the below image versions and moving forward, prebuilt images on [Docker Hub](https://hub.docker.com/u/datastax/) will include OpenJDK.  If you would like to use OpenJDK with a version that was built with Oracle JDK we have built new images including OpenJDK with a tag of `version-openjdk8`
@@ -316,7 +316,7 @@ Head over to [DataStax Academy](https://academy.datastax.com/quick-downloads?utm
 * Step-by-step tutorials and examples
 * How to build applications using Apache Cassandra™/ DataStax
 
-# Docker Configuration Tips and Tricks
+# OSX Caveats
 
 * If your DSE instance is stopping after starting studio or opsCenter, 
 your docker memory setting may be too low.
