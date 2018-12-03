@@ -9,7 +9,6 @@
 * [Creating an OpsCenter Container](#creating-an-opscenter-container)
 * [Creating a Studio Container](#creating-a-studio-container)
 * [Building](#building)
-* [OSX Caveats](#osx-caveats)
 * [Licensing](#license)
 
 The DataStax base image now uses OpenJDK.  Previously we were building with Oracle JDK.  Starting with the below image versions and moving forward, prebuilt images on [Docker Hub](https://hub.docker.com/u/datastax/) will include OpenJDK.  If you would like to use OpenJDK with a version that was built with Oracle JDK we have built new images including OpenJDK with a tag of `version-openjdk8`
@@ -45,7 +44,13 @@ Built on the best distribution of Apache Cassandra™, DataStax Enterprise is th
 
 * Docker installed on your local system, see [Docker Installation Instructions](https://docs.docker.com/engine/installation/). 
 
-* When [building](#building) custom images from the DataStax github repository, a [DataStax Academy account](https://academy.datastax.com/). 
+* When [building](#building) custom images from the DataStax github repository, a [DataStax Academy account](https://academy.datastax.com/).
+
+* When using Docker for Mac or Docker for Windows, the default resources allocated to the linux VM running docker are 2GB RAM and 2 CPU's. Make sure to adjust these resources to meet the resource requirements for the containers you will be running. More information can be found here on adjusting the resources allocated to docker.
+
+[Docker for mac](https://docs.docker.com/docker-for-mac/#advanced)
+
+[Docker for windows](https://docs.docker.com/docker-for-windows/#advanced)
 
 # Creating a DataStax Enterprise container
 
@@ -315,13 +320,6 @@ Head over to [DataStax Academy](https://academy.datastax.com/quick-downloads?utm
 * Docker Compose examples to spin up connected clusters of DataStax Enterprise, Studio, and Opscenter (also on [github](https://github.com/datastax/docker-images/tree/master/example_compose_yamls))
 * Step-by-step tutorials and examples
 * How to build applications using Apache Cassandra™/ DataStax
-
-# OSX Caveats
-
-* If your DSE instance is stopping after starting studio or opsCenter, 
-your docker memory setting may be too low.
-Default on OSX is 2GB - that is not enough. 
-Try to increase it (tested for 6GB and worked)   
 
 # License
 
