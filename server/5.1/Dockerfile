@@ -51,7 +51,11 @@ RUN set -x \
 # Create folders
     && (for dir in /var/lib/cassandra /var/lib/spark /var/lib/dsefs /var/lib/datastax-agent /var/log/cassandra /var/log/spark /config ; do \
         mkdir -p $dir && chown -R dse:dse $dir && chmod 777 $dir ; \
-    done )
+    done ) \
+# Replace duplicate Spark files by hard links
+    && rm -f $DSE_HOME/resources/spark/client-lib/dse-byos_* \
+    && ln $DSE_HOME/clients/dse-byos_* $DSE_HOME/resources/spark/client-lib/ \
+    && for i in $DSE_HOME/resources/spark/client-lib/*.jar ; do if [ -f $DSE_HOME/resources/spark/lib/`basename $i` ] ; then rm -f $i ; ln $DSE_HOME/resources/spark/lib/`basename $i` $i ; fi ; done
 
 ENV PATH $DSE_HOME/bin:$PATH
 ENV HOME $DSE_HOME
