@@ -39,7 +39,7 @@ ext {
 
 defaultPropertyValue 'imagePrefix', (project.hasProperty('dockerRegistry') ? "$dockerRegistry/" : "") + 'datastax'
 
-def components = ['server', 'opscenter', 'studio']
+def components = ['server', 'opscenter', 'studio', 'ddac']
 
 components.each {
     defaultPropertyValue "${it}Version", "**"
@@ -51,6 +51,7 @@ defaultPropertyValue 'downloadServerUrlTemplate', "${downloadUrlPrefix}/enterpri
 defaultPropertyValue 'downloadAgentUrlTemplate', "${downloadUrlPrefix}/enterprise/datastax-agent-\${VERSION}.tar.gz"
 defaultPropertyValue 'downloadOpscenterUrlTemplate', "${downloadUrlPrefix}/enterprise/opscenter-\${VERSION}.tar.gz"
 defaultPropertyValue 'downloadStudioUrlTemplate', "${downloadUrlPrefix}/datastax-studio/datastax-studio-\${VERSION}.tar.gz"
+defaultPropertyValue 'downloadDdacUrlTemplate', "${downloadUrlPrefix}/ddac/ddac-\${VERSION}-bin.tar.gz"
 
 // configure dcompose plugin logging to show build image progress
 System.setProperty("org.slf4j.simpleLogger.log.com.github.dockerjava.core.command.BuildImageResultCallback", "debug")
@@ -107,9 +108,10 @@ dcompose {
         def dockerFile = fileTree(dir: name, include: "${project.ext.get("${name}Version")}/Dockerfile").singleFile
         def version = dockerFile.readLines().find { it.contains('ARG VERSION=')}.split('=')[1].trim()
         services.maybeCreate(name)
+        def imageName = name == 'ddac' ? name : "dse-$name"
         services.getByName(name) {
             baseDir = dockerFile.parentFile
-            repository = "$imagePrefix/dse-$name:$version"
+            repository = "$imagePrefix/$imageName:$version"
             tasks.getByName(buildImageTaskName).dependsOn(services.getByName('dseBase').buildImageTaskName)
         }
 
