@@ -53,9 +53,9 @@ RUN set -x \
         mkdir -p $dir && chown -R dse:dse $dir && chmod 777 $dir ; \
     done ) \
 # Replace duplicate Spark files by hard links
-    && rm -f $DSE_HOME/resources/spark/client-lib/dse-byos_* \
-    && ln $DSE_HOME/clients/dse-byos_* $DSE_HOME/resources/spark/client-lib/ \
-    && for i in $DSE_HOME/resources/spark/client-lib/*.jar ; do if [ -f $DSE_HOME/resources/spark/lib/`basename $i` ] ; then rm -f $i ; ln $DSE_HOME/resources/spark/lib/`basename $i` $i ; fi ; done
+    && rm -f $DSE_HOME/resources/spark/client-lib/dse-byos_* $DSE_HOME/clients/dse-byos_* \
+    && for i in $DSE_HOME/resources/spark/client-lib/*.jar ; do if [ -f $DSE_HOME/resources/spark/lib/`basename $i` ] ; then rm -f $i ; ln $DSE_HOME/resources/spark/lib/`basename $i` $i ; fi ; done \
+    && for i in $DSE_HOME/resources/hadoop2-client/lib/*.jar ; do if [ -f $DSE_HOME/resources/spark/client-lib/`basename $i` ] ; then rm -f $i ; ln $DSE_HOME/resources/spark/client-lib/`basename $i` $i ; fi ; done
 
 ENV PATH $DSE_HOME/bin:$PATH
 ENV HOME $DSE_HOME
