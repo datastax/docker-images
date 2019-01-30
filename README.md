@@ -321,6 +321,13 @@ Head over to [DataStax Academy](https://academy.datastax.com/quick-downloads?utm
 * Step-by-step tutorials and examples
 * How to build applications using Apache Cassandra™/ DataStax
 
+# Known Limitations
+* CFS is not supported.
+* LCM is not supported.
+* Changing any file not included in the list of approved configuration files will require an additional host volume or customization of the image. An example is SSL key management.
+* The JVM heap size must be set for DataStax Enterprise (DSE) running inside the container using the JVM_EXTRA_OPTS variable or custom cassandra-env.sh. If not set, Java does not honor resource limits set for the container, and will peer through the container to use resources (memory and CPU) of the host. See the JVM_EXTRA_OPTS variable in Using environment variables for more information.
+
+
 # License
 
 * [DataStax License Terms](https://www.datastax.com/terms)
