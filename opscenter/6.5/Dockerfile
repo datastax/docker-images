@@ -6,7 +6,7 @@ FROM dse-base
 
 MAINTAINER "DataStax, Inc <info@datastax.com>"
 
-ARG VERSION=6.5.4
+ARG VERSION=6.5.5
 ARG URL_PREFIX=http://localhost
 ARG OPSCENTER_TARBALL=opscenter-${VERSION}.tar.gz
 ARG OPSCENTER_DOWNLOAD_URL=${URL_PREFIX}/${OPSCENTER_TARBALL}
