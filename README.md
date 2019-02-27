@@ -57,13 +57,13 @@ Built on the best distribution of Apache Cassandra™, DataStax Enterprise is th
 Use the options described in this section to create DataStax Enterprise server containers. 
 
 
-By default, the DSE server image runs in Cassandra-only mode.. To run with advanced DSE  functionality, add the option that enables any combination of search, analytics, and graph to the end of the docker run command.
+By default, the DSE server image runs in Cassandra-only mode. To run with advanced DSE  functionality, add the option that enables any combination of search, analytics, and graph to the end of the docker run command.
 
 Option | Description
 ------------- | -------------
--s | Enables and starts DSE Search.
--k | Enables and starts Analytics.
--g | Enables and starts a DSE Graph.
+`-s` | Enables and starts DSE Search.
+`-k` | Enables and starts Analytics.
+`-g` | Enables and starts a DSE Graph.
 
 Combine startup options to run more than one feature. For more examples, see  [Starting DataStax Enterprise as a stand-alone process ](http://docs.datastax.com/en/dse/6.0/dse-admin/datastax_enterprise/operations/startStop/startDseStandalone.html).
 
@@ -119,22 +119,23 @@ Manage the DSE configuration using one of the following options:
 
 * DSE uses the default values defined for the environment variables unless explicitly set at run time.  
 
-* **NOTE** When using memory resource contraints, you must must set JVM heap size using the environment variable `JVM_EXTRA_OPTS` or custom `cassandra-env.sh` or DSE running inside the container due to java not honoring resource limits set for the container. Java utilizes the resources (memory and CPU) of the host. Otherwise DSE will set the heap to 1/4 of the physical ram of the docker host.
+* **NOTE** When using memory resource contraints, you must must set JVM heap size using the environment variable `JVM_OPTS` or custom `jvm.options` or DSE running inside the container due to java not honoring resource limits set for the container. Java utilizes the resources (memory and CPU) of the host. Otherwise DSE will set the heap to 1/4 of the physical ram of the docker host.
 
 ### Using the DSE conf volume
 
 To use this feature:
 
 1. Create a directory on your local host.
-2. Download and customize the configuration files you want to use from the [config-templates](https://github.com/datastax/docker-images/tree/master/config-templates) page.  
+2. Download and customize the configuration files you want to use from the [config-templates](https://github.com/datastax/docker-images/tree/master/config-templates) page.
 3. Add the custom configuration files to the host directory you created.
-    * The file name must match a corresponding configuration file in the image and include all the required values, for example cassandra.yaml, dse.yaml. 
+    * The file name must match a corresponding configuration file in the image and include all the required values, for example `cassandra.yaml`, `dse.yaml`. 
 4. Mount the exposed Volume /config to the local directory.
 5. Start the container. For example to start a database node:
 
 ```
 docker run -e DS_LICENSE=accept --name my-dse  -v /dse/config:/config -d datastax/dse-server
 ```
+
 **Note** When you make changes to or add config files to the `/config` volume, you will need to restart your container with `docker restart container_name` for DSE to pickup the changes. Restarting the container will restart DSE.
 
 ### Using environment variables
@@ -156,10 +157,10 @@ Variable | Setting        | Description
 `DC` | *string* | Datacenter name. Default: `Cassandra`.
 `RACK` | *string* | Rack name. Default: `rack1`.
 `OPSCENTER_IP` | *IP_address* \| *string* | Address of OpsCenter instance to use for DSE management; it can be specified via linking the OpsCenter container using opscenter as the name.
-`JVM_EXTRA_OPTS` | *string* |  Allows setting custom Heap using -Xmx and -Xms.
+`JVM_OPTS` | *string* |  Allows setting custom Heap using `-Xmx` and `-Xms`.
 `LANG` | *string* |  Allows setting custom Locale
-`SNITCH` | *string* |  This variable sets the snitch implementation this node will use. It will set the endpoint_snitch option of cassandra.yaml. Default: GossipingPropertyFileSnitch
-`DSE_AUTO_CONF_OFF` | *string* | Sometimes users want to set all variables in the config files. For these situations one must prevent default environment variables from overriding those values. This setting lets you provide a comma-separated list of filenames (options are  cassandra.yaml and cassandra-rackdc.properties) that will not accept the Environmental variables or can be set to 'all' to disable default environment variables being set within either file.
+`SNITCH` | *string* |  This variable sets the snitch implementation this node will use. It will set the `endpoint_snitch` option of `cassandra.yaml`. Default: `GossipingPropertyFileSnitch`
+`DSE_AUTO_CONF_OFF` | *string* | Sometimes users want to set all variables in the config files. For these situations one must prevent default environment variables from overriding those values. This setting lets you provide a comma-separated list of filenames (options are `cassandra.yaml` and `cassandra-rackdc.properties`) that will not accept the environment variables or can be set to 'all' to disable default environment variables being set within either file.
 
 
 
@@ -169,7 +170,7 @@ To persist data, pre-create directories on the local host and map the directory 
 
 **NOTE:** If the volumes are not mounted from the local host, all data is lost when the container is removed.
 
-DSE images expose the following volumes.  
+DSE images expose the following volumes.
 
 * For DataStax Enterprise Transactional, Search, Graph, and Analytics workloads:
    * `/var/lib/cassandra`: Data from Cassandra
@@ -283,7 +284,7 @@ By default, [Gradle](https://gradle.org) will download DataStax tarballs from [D
 Therefore you need to provide your credentials either via the command line, or in `gradle.properties` file located
 in the project root.
 
-DataStax uses two separate Dockerfiles to build the individual images, a base for the OS and individual Dockerfiles for (server, opscenter, studio).  
+DataStax uses two separate Dockerfiles to build the individual images, a base for the OS and individual Dockerfiles for (server, opscenter, studio).
 
 If you would like to customize the OS, install additional packages etc, you would modify the base Dockerfile. 
 
@@ -325,7 +326,7 @@ Head over to [DataStax Academy](https://academy.datastax.com/quick-downloads?utm
 * CFS is not supported.
 * LCM is not supported.
 * Changing any file not included in the list of approved configuration files will require an additional host volume or customization of the image. An example is SSL key management.
-* The JVM heap size must be set for DataStax Enterprise (DSE) running inside the container using the JVM_EXTRA_OPTS variable or custom cassandra-env.sh. If not set, Java does not honor resource limits set for the container, and will peer through the container to use resources (memory and CPU) of the host. See the JVM_EXTRA_OPTS variable in Using environment variables for more information.
+* The JVM heap size must be set for DataStax Enterprise (DSE) running inside the container using the `JVM_OPTS` variable or custom `jvm.options`. If not set, Java does not honor resource limits set for the container, and will peer through the container to use resources (memory and CPU) of the host. See the `JVM_OPTS` variable in Using environment variables for more information.
 
 
 # License
