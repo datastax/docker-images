@@ -6,7 +6,7 @@ FROM dse-base
 
 MAINTAINER "DataStax, Inc <info@datastax.com>"
 
-ARG VERSION=5.1.12
+ARG VERSION=5.1.13
 ARG URL_PREFIX=http://localhost
 ARG DDAC_TARBALL=ddac-${VERSION}-bin.tar.gz
 ARG DDAC_DOWNLOAD_URL=${URL_PREFIX}/${DDAC_TARBALL}
