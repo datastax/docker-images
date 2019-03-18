@@ -332,4 +332,3 @@ Head over to [DataStax Academy](https://academy.datastax.com/quick-downloads?utm
 
 * [DataStax License Terms](https://www.datastax.com/terms)
 * [OpsCenter License Terms](https://www.datastax.com/datastax-opscenter-license-terms)
-* [DataStax License Terms](https://www.datastax.com/terms)
