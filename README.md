@@ -16,6 +16,7 @@ The DataStax base image now uses OpenJDK.  Previously we were building with Orac
 * DSE `6.0.2` and `5.1.11`
 * OpsCenter `6.5.1` and `6.1.7`
 * Studio `6.0.1`
+* DSBulk `1.3.3`
 
 # Quick Reference 
 ### Where to get help:
@@ -273,9 +274,18 @@ docker run -e DS_LICENSE=accept --link my-dse --name my-studio -p 9091:9091 -d d
 
 Studio is ready to use with DSE. See [DataStax Studio User Guide](http://docs.datastax.com/en/dse/5.1/dse-dev/datastax_enterprise/studio/stdAbout.html) for detailed usage and configuration instructions.
 
+## Using DSBulk
+
+To load and unload data using the DSBulk Docker image, you need to mount directories for data and for logs (optional). Inside Docker image there are corresponding mount points: `/dsbulk/data/` and `/dsbulk/logs/`.  In this case, command line could look as following (you need to specify contact point (`_IP`), keyspace (`_KS`) and table (`_TABLE_`)):
+
+```sh
+docker run --rm -ti -v ./data/:/dsbulk/data/ -v ./logs/:/dsbulk/logs/ datastax/dse-dsbulk \
+   unload -h _IP_ -k _KS_ -t _TABLE_ -url /dsbulk/data/dest
+```
+
 # Building
 
-The code in this repository will build the DSE, Opscenter and Studio Docker images. To get started, clone this repo and modify for your requirements. 
+The code in this repository will build the DSE, Opscenter, Studio and DSBulk Docker images. To get started, clone this repo and modify for your requirements. 
 
 This repo uses Gradle to build the images.
 
@@ -297,7 +307,7 @@ ARG DSE_AGENT_VERSION=6.1.4
 
 To build specific versions of OpsCenter and Studio, you would modify `ARG VERSION=` in their corresponding Dockerfile.
 
-Currently you have to build all 3 images
+Currently you have to build all 4 images
 
 To build the images from your customized Dockerfile(s) run the following command specifying the Version branch for each image: 
 For example to build DSE 5.1.10 with OpsCenter 6.1.4 and Studio 2.0 you would run the following adding your DataStax Academy Credentials
