@@ -44,8 +44,6 @@ Built on the best distribution of Apache Cassandra™, DataStax Enterprise is th
 
 * Docker installed on your local system, see [Docker Installation Instructions](https://docs.docker.com/engine/installation/). 
 
-* When [building](#building) custom images from the DataStax github repository, a [DataStax Academy account](https://academy.datastax.com/).
-
 * When using Docker for Mac or Docker for Windows, the default resources allocated to the linux VM running docker are 2GB RAM and 2 CPU's. Make sure to adjust these resources to meet the resource requirements for the containers you will be running. More information can be found here on adjusting the resources allocated to docker.
 
 [Docker for mac](https://docs.docker.com/docker-for-mac/#advanced)
