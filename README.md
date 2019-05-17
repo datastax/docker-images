@@ -44,8 +44,6 @@ Built on the best distribution of Apache Cassandra™, DataStax Enterprise is th
 
 * Docker installed on your local system, see [Docker Installation Instructions](https://docs.docker.com/engine/installation/). 
 
-* When [building](#building) custom images from the DataStax github repository, a [DataStax Academy account](https://academy.datastax.com/).
-
 * When using Docker for Mac or Docker for Windows, the default resources allocated to the linux VM running docker are 2GB RAM and 2 CPU's. Make sure to adjust these resources to meet the resource requirements for the containers you will be running. More information can be found here on adjusting the resources allocated to docker.
 
 [Docker for mac](https://docs.docker.com/docker-for-mac/#advanced)
@@ -280,8 +278,6 @@ The code in this repository will build the DSE, Opscenter and Studio Docker imag
 This repo uses Gradle to build the images.
 
 By default, [Gradle](https://gradle.org) will download DataStax tarballs from [DataStax Academy](https://downloads.datastax.com).
-Therefore you need to provide your credentials either via the command line, or in `gradle.properties` file located
-in the project root.
 
 DataStax uses two separate Dockerfiles to build the individual images, a base for the OS and individual Dockerfiles for (server, opscenter, studio).  
 
@@ -303,7 +299,7 @@ To build the images from your customized Dockerfile(s) run the following command
 For example to build DSE 5.1.10 with OpsCenter 6.1.4 and Studio 2.0 you would run the following adding your DataStax Academy Credentials
 
 ```
-./gradlew buildServerImage -PserverVersion=5.1 -PopscenterVersion=6.1 -PstudioVersion=2.0 buildImages -PdownloadUsername=<your_DataStax_Acedemy_username> -PdownloadPassword=<your_DataStax_Acedemy_passwd>
+./gradlew buildServerImage -PserverVersion=5.1 -PopscenterVersion=6.1 -PstudioVersion=2.0 buildImages 
 ```
 
 Run `./gradlew tasks` to get the list of all available tasks.
