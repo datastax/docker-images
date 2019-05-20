@@ -6,7 +6,7 @@ FROM python:2.7-alpine
 
 MAINTAINER "DataStax, Inc <info@datastax.com>"
 
-ARG VERSION=${VERSION}
+ARG VERSION=6.7.3
 ARG URL_PREFIX=http://localhost
 ARG DSE_TARBALL=dse-${VERSION}-bin.tar.gz
 ARG DSE_DOWNLOAD_URL=${URL_PREFIX}/${DSE_TARBALL}

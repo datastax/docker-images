@@ -39,7 +39,7 @@ ext {
 
 defaultPropertyValue 'imagePrefix', (project.hasProperty('dockerRegistry') ? "$dockerRegistry/" : "") + 'datastax'
 
-def components = ['server', 'opscenter', 'studio', 'ddac']
+def components = ['server', 'opscenter', 'studio', 'ddac', 'cqlsh']
 
 components.each {
     defaultPropertyValue "${it}Version", "**"
@@ -48,6 +48,7 @@ components.each {
 
 defaultPropertyValue 'downloadUrlPrefix', 'https://downloads.datastax.com'
 defaultPropertyValue 'downloadServerUrlTemplate', "${downloadUrlPrefix}/enterprise/dse-\${VERSION}-bin.tar.gz"
+defaultPropertyValue 'downloadCqlshUrlTemplate', "${downloadServerUrlTemplate}"
 defaultPropertyValue 'downloadAgentUrlTemplate', "${downloadUrlPrefix}/enterprise/datastax-agent-\${VERSION}.tar.gz"
 defaultPropertyValue 'downloadOpscenterUrlTemplate', "${downloadUrlPrefix}/enterprise/opscenter-\${VERSION}.tar.gz"
 defaultPropertyValue 'downloadStudioUrlTemplate', "${downloadUrlPrefix}/datastax-studio/datastax-studio-\${VERSION}.tar.gz"
