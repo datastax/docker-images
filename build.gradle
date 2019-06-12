@@ -6,46 +6,29 @@
 
 buildscript {
     repositories {
-        jcenter()
+        mavenCentral()
     }
     dependencies {
-        classpath 'de.undercouch:gradle-download-task:3.3.0'
+        classpath 'org.freemarker:freemarker:2.3.28'
+        classpath 'commons-io:commons-io:2.6'
+        classpath 'com.google.guava:guava:28.0-jre'
+
     }
 }
 
 plugins {
-    id "com.chrisgahlert.gradle-dcompose-plugin" version "0.9.2"
+    id 'base'
+    id 'com.bmuschko.docker-remote-api' version '4.10.0'
+    id "nebula.override" version "3.0.2"
+    id "de.undercouch.download" version "3.4.3"
 }
-
-apply plugin: 'de.undercouch.download'
 
 import de.undercouch.gradle.tasks.download.Download
+import com.bmuschko.gradle.docker.tasks.image.*
+import com.bmuschko.gradle.docker.tasks.AbstractDockerRemoteApiTask
+import com.google.common.base.CaseFormat
 
-repositories {
-    maven {
-        url "https://plugins.gradle.org/m2/"
-    }
-
-    mavenCentral()
-}
-
-dependencies {
-    dcompose 'com.github.docker-java:docker-java:3.0.13'
-}
-
-ext {
-    downloadsDir = file("$buildDir/downloads")
-}
-
-defaultPropertyValue 'imagePrefix', (project.hasProperty('dockerRegistry') ? "$dockerRegistry/" : "") + 'datastax'
-
-def components = ['server', 'opscenter', 'studio', 'ddac']
-
-components.each {
-    defaultPropertyValue "${it}Version", "**"
-    defaultPropertyValue "${it}LatestVersion", "false"
-}
-
+defaultPropertyValue 'agentVersion', '6.7.4'
 defaultPropertyValue 'downloadUrlPrefix', 'https://downloads.datastax.com'
 defaultPropertyValue 'downloadServerUrlTemplate', "${downloadUrlPrefix}/enterprise/dse-\${VERSION}-bin.tar.gz"
 defaultPropertyValue 'downloadAgentUrlTemplate', "${downloadUrlPrefix}/enterprise/datastax-agent-\${VERSION}.tar.gz"
@@ -53,136 +36,167 @@ defaultPropertyValue 'downloadOpscenterUrlTemplate', "${downloadUrlPrefix}/enter
 defaultPropertyValue 'downloadStudioUrlTemplate', "${downloadUrlPrefix}/datastax-studio/datastax-studio-\${VERSION}.tar.gz"
 defaultPropertyValue 'downloadDdacUrlTemplate', "${downloadUrlPrefix}/ddac/ddac-\${VERSION}-bin.tar.gz"
 
-// configure dcompose plugin logging to show build image progress
-System.setProperty("org.slf4j.simpleLogger.log.com.github.dockerjava.core.command.BuildImageResultCallback", "debug")
-System.setProperty("org.slf4j.simpleLogger.showThreadName", "false")
-System.setProperty("org.slf4j.simpleLogger.showLogName", "false")
-System.setProperty("org.slf4j.simpleLogger.logFile", "System.out")
+defaultPropertyValue 'imagePrefix', (project.hasProperty('dockerRegistry') ? ( "$dockerRegistry/" - 'http://' - 'https://') : "") + 'datastax'
 
-dcompose {
+docker {
+    registryCredentials {
+        if (project.hasProperty('dockerRegistry')) {
+            url = project.dockerRegistry
+        }
+        if (project.hasProperty('registryUsername'))
+        {
+            username = project.registryUsername
+        }
 
-    if (project.hasProperty('dockerRegistry'))
-    {
-        registry(dockerRegistry) {
-            if (project.hasProperty('registryUsername'))
-            {
-                withUsername project.registryUsername
+        if (project.hasProperty('registryPassword'))
+        {
+            password = project.registryPassword
+        }
+    }
+}
+
+def dockerImages(Object...contextDirs) {
+    contextDirs.collect { file(it) }.each { contextDir ->
+        def imageName = "dse-${contextDir.name}"
+        tasks.create("build${CaseFormat.LOWER_HYPHEN.to(CaseFormat.UPPER_CAMEL, contextDir.name)}Image", DockerBuildImage) {
+            group = 'Build'
+            ext.imageName = imageName
+            description = "Build $imageName image"
+            inputDir = contextDir
+            tags.add("$imageName:latest")
+        }
+    }
+}
+
+def taskForDockerImage(imageName) {
+    tasks.withType(DockerBuildImage).find { it.imageName == imageName }
+}
+
+def renderDockerContextTask(templateDir, version) {
+    tasks.create("renderDocker${templateDir.name.capitalize()}ContextForVersion$version", RenderDir) {
+        vars.version = version
+        vars.agentVersion = agentVersion
+        sourceDir templateDir
+        into "$buildDir/${templateDir.name}/$version"
+        preserve {
+            include "**/*.tar.gz"
+            include "**/*.zip"
+        }
+    }
+
+}
+
+dockerImages 'base'
+
+tasks.addRule("Pattern: (build|push)<Image><Version>Image: build/push Docker image out of templates in <Image> folder and for given <Version>") { taskName ->
+
+    def m = taskName =~ /^build([A-Z]\p{Alpha}*)(\d+)\.(\d+)\.(\d+)((-\S+)?)Image$/
+    def templateName
+    def templateDir
+    def version
+    if (m) {
+        templateName = CaseFormat.UPPER_CAMEL.to(CaseFormat.LOWER_CAMEL, m[0][1])
+        templateDir = file(CaseFormat.UPPER_CAMEL.to(CaseFormat.LOWER_HYPHEN, m[0][1]))
+        version = new Version(m[0][2], m[0][3], m[0][4], m[0][5])
+    } else {
+        m = taskName =~ /^build([A-Z]\p{Alpha}*)Image$/
+        if (m) {
+            templateName = CaseFormat.UPPER_CAMEL.to(CaseFormat.LOWER_CAMEL, m[0][1])
+            templateDir = file(CaseFormat.UPPER_CAMEL.to(CaseFormat.LOWER_HYPHEN, m[0][1]))
+        }
+    }
+    if (templateDir) {
+        assert templateDir.exists(): "Template dir $templateDir does not exist"
+        if (!version) {
+            def versionProperty = "${templateName}Version"
+            assert project.hasProperty(versionProperty): "Property $versionProperty must be specified"
+            version = new Version(project.getProperty(versionProperty))
+        }
+        def url = renderTemplate(project.ext.get("download${templateName.capitalize()}UrlTemplate"), [VERSION: version])
+        def renderTask = renderDockerContextTask(templateDir, version)
+        def imageName = templateDir.name
+        if (imageName in ['server', 'studio', 'opscenter']) {
+            imageName = "dse-" + imageName
+        }
+        def downloadTask = tasks.create("download${templateName.capitalize()}$version", Download) {
+            src url
+            onlyIfModified  true
+            dest renderTask.destinationDir
+        }
+
+        tasks.create(taskName, DockerBuildImage) {
+            ext.imageName = imageName
+            dependsOn renderTask, downloadTask, taskForDockerImage('dse-base')
+            inputDir = renderTask.destinationDir
+            tags.add("$imagePrefix/$imageName:$version")
+            def extraVersionProperty = "${taskName}ExtraVersions"
+            if (project.hasProperty(extraVersionProperty)) {
+                project.getProperty(extraVersionProperty).split(',').collect { it.trim() }.each { v ->
+                    tags.add("$imagePrefix/$imageName:$v")
+                }
+            }
+            buildArgs.putAll([DOWNLOAD_URL : url, TARBALL: url.split('/').last()])
+
+            if (new File(url).exists()) {
+                dependsOn(tasks.create("copy${templateName.capitalize()}ToBuildCtx", Copy) {
+                    from url
+                    into renderTask.destinationDir
+                })
             }
 
-            if (project.hasProperty('registryPassword'))
-            {
-                withPassword project.registryPassword
-            }
         }
     } else {
-        dockerClientConfig = {
-            if (project.hasProperty('registryUsername'))
-            {
-                withRegistryUsername project.registryUsername
-            }
-
-            if (project.hasProperty('registryPassword'))
-            {
-                withRegistryPassword project.registryPassword
-            }
-        }
-    }
-
-    downloadServer {
-        image = 'svenbrnn/alpine-lighttpd2:latest'
-        publishAllPorts = true
-        binds = ["$downloadsDir:/var/www"]
-        deploy = false
-    }
-
-    dseBase {
-        baseDir = file('base')
-        repository = 'dse-base'
-        deploy = false
-        forcePull = true
-    }
-
-    mkdir downloadsDir
-
-    components.each { name ->
-        def dockerFile = fileTree(dir: name, include: "${project.ext.get("${name}Version")}/Dockerfile").singleFile
-        def version = dockerFile.readLines().find { it.contains('ARG VERSION=')}.split('=')[1].trim()
-        services.maybeCreate(name)
-        def imageName = name == 'ddac' ? name : "dse-$name"
-        services.getByName(name) {
-            baseDir = dockerFile.parentFile
-            repository = "$imagePrefix/$imageName:$version"
-            tasks.getByName(buildImageTaskName).dependsOn(services.getByName('dseBase').buildImageTaskName)
-        }
-
-        if (project.ext.get("${name}LatestVersion") == "true") {
-            services.maybeCreate("${name}Latest")
-            services.getByName("${name}Latest") {
-                image = "$imagePrefix/dse-$name:$version"
-                repository = "$imagePrefix/dse-$name:latest"
-                tasks.getByName(pullImageTaskName).dependsOn(services.getByName(name).buildImageTaskName)
-            }
-
-        }
-
-        def t = tasks.create("download${name.capitalize()}Archives", Download) {
-            dest downloadsDir
-            onlyIfModified  true
-            def engine = new groovy.text.SimpleTemplateEngine()
-            def urlsTemplates = [ project.ext.get("download${name.capitalize()}UrlTemplate")]
-            def urls = urlsTemplates.collect { engine.createTemplate(it).make('VERSION': version).toString() }
-            if (name == 'server') {
-                def agentVersion = dockerFile.readLines().find { it.contains('ARG DSE_AGENT_VERSION=')}.split('=')[1].trim()
-                urls << engine.createTemplate(project.ext.get("downloadAgentUrlTemplate")).make('VERSION': agentVersion).toString()
-            }
-
-            src(urls)
-        }
-        configure(tasks."build${name.capitalize()}Image") {
-            dependsOn t, startDownloadServerContainer
-            finalizedBy stopDownloadServerContainer
-        }
-
-        stopDownloadServerContainer.mustRunAfter tasks."build${name.capitalize()}Image"
-    }
-}
-
-task skipDownloads
-
-startDownloadServerContainer {
-    mustRunAfter tasks.withType(Download)
-    doLast {
-        def host = service.dockerHost
-        def port = service.findHostPort(80)
-        if (host in ['localhost', '127.0.0.1'])
-        {
-            host = runInDockerClasspath {
-                def response = client.execCreateCmd(containerId)
-                        .withCmd('sh', '-c', 'ip route | awk \'\$1 == \"default\" {print \$3}\'')
-                        .withAttachStdout(true)
-                        .exec()
-                def out = new ByteArrayOutputStream()
-                def callback = loadClass('com.github.dockerjava.core.command.ExecStartResultCallback').newInstance(out, System.err)
-                client.execStartCmd(response.id).exec(callback).awaitCompletion()
-                out.toString().trim()
-            }
-        }
-        defaultPropertyValue("dockerHost", host)
-        ext.url = "http://${dockerHost}:${port}"
-        logger.lifecycle "Serving files on ${url}"
-        components.each { name ->
-            dcompose.services.getByName(name) {
-                buildArgs = [ 'URL_PREFIX': url ]
+        if (taskName.startsWith('push') && taskName.endsWith('Image')) {
+            def buildImageTask = tasks.getByName("build${taskName.substring(4)}")
+            tasks.create(taskName, DockerPushImage) {
+                dependsOn buildImageTask
+                buildImageTask.tags.getOrNull().asList().eachWithIndex { t, i ->
+                    if (i == 0) {
+                        imageName = t
+                    } else {
+                        finalizedBy(tasks.create("${taskName}As${t.split(':').toList().last()}", DockerPushImage) {
+                            dependsOn buildImageTask
+                            imageName = t
+                        })
+                    }
+                }
             }
         }
     }
 }
 
-[pushDownloadServerImage, pushDseBaseImage]*.enabled = false
+def renderTemplate(tpl, vars = [:]) {
+    def engine = new groovy.text.SimpleTemplateEngine()
+    engine.createTemplate(tpl).make(vars).toString()
+}
+
+task enableLocalDownloads
+
+tasks.withType(AbstractDockerRemoteApiTask) {
+    outputs.upToDateWhen { false }
+}
+
+tasks.matching { it.name.startsWith('buildServer') }.all {
+    def url = renderTemplate(project.ext.get("downloadAgentUrlTemplate"), [VERSION: agentVersion])
+    buildArgs.putAll([DSE_AGENT_DOWNLOAD_URL : url, DSE_AGENT_TARBALL: url.split('/').last()])
+}
+
+tasks.matching { it.name.startsWith('downloadServer') }.all {
+    def url = renderTemplate(project.ext.get("downloadAgentUrlTemplate"), [VERSION: agentVersion])
+    src([ src, url])
+}
+
+buildBaseImage {
+    pull = true
+}
+
+tasks.withType(Download) {
+    enabled = false
+}
 
 gradle.taskGraph.whenReady { g ->
-    if (g.hasTask(skipDownloads)) {
-        tasks.withType(Download) { enabled = false }
+    if (g.hasTask(enableLocalDownloads)) {
+        tasks.withType(Download) { enabled = true }
     }
 }
 
@@ -199,3 +213,103 @@ void defaultPropertyValue(name, value) {
     }
 }
 
+
+import freemarker.template.*
+import org.apache.commons.io.input.ProxyReader
+
+class RenderDir extends Sync {
+
+    private File sourceDir
+    def freeMarkerCfg
+
+    @Input
+    def vars
+
+    RenderDir() {
+        freeMarkerCfg = new Configuration(Configuration.VERSION_2_3_28)
+        freeMarkerCfg.defaultEncoding = "UTF-8"
+        freeMarkerCfg.tagSyntax = Configuration.ANGLE_BRACKET_TAG_SYNTAX
+        freeMarkerCfg.interpolationSyntax = Configuration.SQUARE_BRACKET_INTERPOLATION_SYNTAX
+
+        freeMarkerCfg.templateExceptionHandler = TemplateExceptionHandler.RETHROW_HANDLER
+        freeMarkerCfg.logTemplateExceptions = false
+        freeMarkerCfg.wrapUncheckedExceptions = true
+        vars = [:]
+        eachFile { fd ->
+            if (sourceName.endsWith('.ftl')) {
+                name = sourceName - '.ftl'
+                filter(["freeMarkerCfg": freeMarkerCfg,
+                        "fileName": fd.relativeSourcePath.pathString,
+                        "vars": vars], FreeMarkerReader)
+            }
+        }
+    }
+
+    void sourceDir(File dir) {
+        from dir
+        sourceDir = dir
+        freeMarkerCfg.directoryForTemplateLoading = dir
+    }
+}
+
+class FreeMarkerReader extends ProxyReader {
+    def freeMarkerCfg
+    def fileName
+    def rendered
+    def vars
+
+    FreeMarkerReader(Reader r) {
+        super(r)
+    }
+
+    void beforeRead(int i) {
+        if (!rendered) {
+            def template = freeMarkerCfg.getTemplate(fileName)
+            def w = new StringWriter()
+            template.process(vars, w)
+            this.in = new StringReader(w.toString())
+            rendered = true
+        }
+    }
+}
+
+class Version implements Serializable {
+    int major, minor, bugfix
+    def customSuffix
+
+    Version(major, minor, bugfix, customSuffix) {
+        this.major = Integer.parseInt(major)
+        this.minor = Integer.parseInt(minor)
+        this.bugfix = Integer.parseInt(bugfix)
+        this.customSuffix = customSuffix
+    }
+
+    Version(String v) {
+        this(parseVersion(v))
+    }
+
+    Version(Map m) {
+        this(m.major, m.minor, m.bugfix, m.customSuffix)
+    }
+
+    static def parseVersion(String v) {
+        def m = v =~ /^(\d+)\.(\d+)\.(\d+)((-\S+)?)$/
+        assert m: "$v is not parseable version"
+        [major: m[0][1], minor: m[0][2], bugfix: m[0][3], customSuffix: m[0][4]]
+    }
+
+    String toString() { "$major.$minor.$bugfix$customSuffix"}
+
+    int getNumericValue() {
+        major * 100000 + minor * 100 + bugfix
+    }
+
+    boolean lowerThan(String givenVersionStr) {
+        return numericValue < new Version(givenVersionStr).numericValue
+    }
+
+    boolean greaterEqualThan(String givenVersionStr) {
+        return numericValue >= new Version(givenVersionStr).numericValue
+    }
+
+}

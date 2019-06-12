@@ -273,36 +273,83 @@ Studio is ready to use with DSE. See [DataStax Studio User Guide](http://docs.da
 
 # Building
 
-The code in this repository will build the DSE, Opscenter and Studio Docker images. To get started, clone this repo and modify for your requirements. 
+The code in this repository builds the DSE, Opscenter, DDAC and Studio Docker images.
+To get started, clone this repo and modify for your requirements. 
 
 This repo uses Gradle to build the images.
 
+Requirements:
+
+* JDK8
+* [Docker](https://docker.com) engine locally or point `DOCKER_HOST` env variable to the Docker engine you would like to build against (version 17.05+)
+
 By default, [Gradle](https://gradle.org) will download DataStax tarballs from [DataStax Academy](https://downloads.datastax.com).
 
-DataStax uses two separate Dockerfiles to build the individual images, a base for the OS and individual Dockerfiles for (server, opscenter, studio).  
+DataStax uses a common base image for all products. If you would like to customize the OS, install additional packages etc, 
+you would modify the `base/Dockerfile`. 
 
-If you would like to customize the OS, install additional packages etc, you would modify the base Dockerfile. 
+In order to support multiple product versions, but without duplicating files, Docker build contexts are generated out of source folders
+that might contain [FreeMarker](https://freemarker.apache.org/docs/index.html) templates (the files with `.ftl` extensions).
+The following conventions are important to remember:
 
-If you would like to customize DSE, Opscenter or Studio you would modify their corresponding Dockerfile. 
-For example: if you wanted to build DSE 5.1.10 with datastax-agent 6.1.4, you would modify the server 5.1 Dockerfile with
+* Docker build context for each product is generated out of folder having the product name (e.g. `server`, `opscenter`, or `studio`)
+* The files NOT ending with `.ftl` extension are copied to the build context AS IS
+* The files ending with `.ftl` are processed as FreeMarker templates
+   * Template directives are written using [angle bracket syntax](https://freemarker.apache.org/docs/dgui_template_directives.html)
+   * Square bracket syntax is used for [interpolations](https://freemarker.apache.org/docs/dgui_misc_alternativesyntax.html#dgui_misc_alternativesyntax_interpolation)  
+   * Resulting content is copied to the build context under the filename with `.ftl` extension stripped out 
+     (e.g. `Dockerfile.ftl` becomes `Dockerfile`)
+* Each FreeMarker template has access to `version` variable 
+   * The following properties are available
+     * `version.major` returns product version major number
+     * `version.minor` returns product version minor number
+     * `version.bugfix` returns product version bugfix number
+   * The following functions are available
+     * `version.lowerThan('x.y.z')` return `true` if `version` is semantically lower than `x.y.z`
+     * `version.greaterEqualThan('x.y.z')` return `true` if `version` is semantically greater or equal than `x.y.z`
+
+If you would like to customize DSE, Opscenter, Studio or DDAC you would need to modify templates in their corresponding folder. 
+
+Building a product image for a given version requires invoking a Gradle task that follows the pattern:
 
 ```
-ARG VERSION=5.1.10
-ARG DSE_AGENT_VERSION=6.1.4
-```
-
-To build specific versions of OpsCenter and Studio, you would modify `ARG VERSION=` in their corresponding Dockerfile.
-
-Currently you have to build all 3 images
-
-To build the images from your customized Dockerfile(s) run the following command specifying the Version branch for each image: 
-For example to build DSE 5.1.10 with OpsCenter 6.1.4 and Studio 2.0 you would run the following adding your DataStax Academy Credentials
+./gradlew build<Product><Version>Image
 
 ```
-./gradlew buildServerImage -PserverVersion=5.1 -PopscenterVersion=6.1 -PstudioVersion=2.0 buildImages 
+ 
+For example: if you want to build DSE 5.1.10, you need to say
+
+```
+./gradlew buildServer5.1.0Image
 ```
 
+on the command line.
+
+You can build many images at once:
+
+```
+./gradlew buildServer5.1.0Image buildServer6.7.0Image buildOpscenter6.7.0Image
+```
+
+Publishing an image to a registry (default: [Docker Hub](https://hub.docker.com)) requires invoking a Gradle task that follows the pattern:
+
+```
+./gradlew push<Product><Version>Image
+
+```
+
+Pushing to a private registry requires providing the registry url and the credentials either through project properties
+on the command line or via `gradle.properties` file:
+
+```properties
+dockerRegistry=https://your.private.registry.org
+registryUsername=<USERNAME>
+registryPassword=<PASSWORD>
+
+```
+ 
 Run `./gradlew tasks` to get the list of all available tasks.
+
 
 # Next Steps
 

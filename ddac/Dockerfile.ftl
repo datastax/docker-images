@@ -2,15 +2,7 @@
 #   Please review the included LICENSE file for more information.
 #
 
-FROM dse-base
-
-MAINTAINER "DataStax, Inc <info@datastax.com>"
-
-ARG VERSION=5.1.15
-ARG URL_PREFIX=http://localhost
-ARG DDAC_TARBALL=ddac-${VERSION}-bin.tar.gz
-ARG DDAC_DOWNLOAD_URL=${URL_PREFIX}/${DDAC_TARBALL}
-
+FROM dse-base as ddac-base
 
 ENV DDAC_HOME /opt/cassandra
 
@@ -29,18 +21,29 @@ RUN set -x \
     && apt-get clean all \
     && rm -rf /var/lib/{apt,dpkg,cache,log}/
 
-COPY files /
+FROM ddac-base as base
+
+ARG VERSION=[=version]
+ARG TARBALL=ddac-${VERSION}-bin.tar.gz
+ARG DOWNLOAD_URL=${URL_PREFIX}/${DDAC_TARBALL}
 
 RUN set -x \
 # Download DDAC tarball if needed
-    && if test ! -e /${DDAC_TARBALL}; then wget -q -O /${DDAC_TARBALL} ${DDAC_DOWNLOAD_URL} ; fi \
+    && if test ! -e /${TARBALL}; then wget -nv --show-progress --progress=bar:force:noscroll -O /${TARBALL} ${DOWNLOAD_URL} ; fi \
 # Unpack tarball
-    && tar -C "$DDAC_HOME" --strip-components=1 -xzf /${DDAC_TARBALL} \
-    && rm /${DDAC_TARBALL} \
-    && chown -R cassandra:cassandra ${DDAC_HOME} \
+    && tar -C "$DDAC_HOME" --strip-components=1 -xzf /${TARBALL} \
+    && rm /${TARBALL}
+
+FROM ddac-base
+
+MAINTAINER "DataStax, Inc <info@datastax.com>"
+
+COPY files /
+
+COPY --chown=cassandra:cassandra --from=base $DDAC_HOME $DDAC_HOME
 
 # Create folders
-    && (for dir in /var/log/cassandra /var/lib/cassandra /config ; do \
+RUN (for dir in /var/log/cassandra /var/lib/cassandra /config ; do \
         mkdir -p $dir && chown -R cassandra:cassandra $dir && chmod 777 $dir ; \
     done ) \
     && (for dir in $DDAC_HOME/data $DDAC_HOME/logs ; do \
