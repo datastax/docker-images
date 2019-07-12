@@ -28,9 +28,16 @@ CASSANDRA_RACK_CONFIG="${DSE_HOME}/resources/cassandra/conf/cassandra-rackdc.pro
 # SNITCH sets the snitch this node will use. Use GossipingPropertyFileSnitch if not set
 : ${SNITCH=GossipingPropertyFileSnitch}
 
-# NATIVE_TRANSPORT_ADDRESS is where we listen for drivers/clients to connect to us. Setting to 0.0.0.0 by default is fine
-# since we'll be specifying the NATIVE_TRANSPORT_BROADCAST_ADDRESS below
-: ${NATIVE_TRANSPORT_ADDRESS='0.0.0.0'}
+<#if version.major == 5 >
+<#assign ADDRESS_ENV_NAME = "RPC_ADDRESS">
+<#assign BROADCAST_ADDRESS_ENV_NAME = "BROADCAST_RPC_ADDRESS">
+<#else>
+<#assign ADDRESS_ENV_NAME = "NATIVE_TRANSPORT_ADDRESS">
+<#assign BROADCAST_ADDRESS_ENV_NAME = "NATIVE_TRANSPORT_BROADCAST_ADDRESS">
+</#if>
+# [=ADDRESS_ENV_NAME] is where we listen for drivers/clients to connect to us. Setting to 0.0.0.0 by default is fine
+# since we'll be specifying the [=BROADCAST_ADDRESS_ENV_NAME] below
+: ${[=ADDRESS_ENV_NAME]='0.0.0.0'}
 
 # LISTEN_ADDRESS is where we listen for other nodes who want to communicate. 'auto' is not a valid value here,
 # so use the hostname's IP by default
@@ -47,7 +54,7 @@ if [ "$BROADCAST_ADDRESS" = 'auto' ]; then
 fi
 
 # By default, tell drivers/clients to use the same address that other nodes are using to communicate with us
-: ${NATIVE_TRANSPORT_BROADCAST_ADDRESS=$BROADCAST_ADDRESS}
+: ${[=BROADCAST_ADDRESS_ENV_NAME]=$BROADCAST_ADDRESS}
 
 # SEEDS is for other nodes in the cluster we know about. If not set (because we're the only node maybe), just
 # default to ourself
@@ -65,12 +72,12 @@ if should_auto_configure "$CASSANDRA_CONFIG" ; then
     # Update the following settings in the cassandra.yaml file based on the ENV variable values
     for name in \
         broadcast_address \
-        native_transport_broadcast_address \
+        [=BROADCAST_ADDRESS_ENV_NAME?lower_case] \
         cluster_name \
         listen_address \
         num_tokens \
-        native_transport_address \
-        start_native_transport \
+        [=ADDRESS_ENV_NAME?lower_case] \
+        start_<#if version.major == 5>rpc<#else>native_transport</#if> \
         ; do
         var="${name^^}"
         val="${!var}"

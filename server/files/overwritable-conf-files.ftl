@@ -64,4 +64,6 @@ resources/spark/spark-jobserver/dse.conf
 resources/spark/conf/docker.properties.template
 .cassandra/cqlshrc
 .dserc
+<#if version.major == 5>
 ../agent/conf/datastax-agent-env.sh
+</#if>
