@@ -55,17 +55,13 @@ COPY files /
 
 COPY --chown=dse:dse --from=base $DSE_HOME $DSE_HOME
 
-<#if version.lowerThan('6.8.0') >
 COPY --chown=dse:dse --from=base $DSE_AGENT_HOME $DSE_AGENT_HOME
-</#if>
 
 # Create folders
 RUN (for dir in /var/lib/cassandra \
                 /var/lib/spark \
                 /var/lib/dsefs \
-                <#if version.lowerThan('6.8.0') >
                 /var/lib/datastax-agent \
-                </#if>
                 /var/log/cassandra \
                 /var/log/spark \
                 /config ; do \
