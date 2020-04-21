@@ -172,7 +172,7 @@ role_manager: com.datastax.bdp.cassandra.auth.DseRoleManager
 # Enable this feature only after appropriate user permissions are granted.
 #
 # See Managing keyspace and table permissions at
-# http://http://docsreview.datastax.lan/en/dse/6.0/dse-admin/datastax_enterprise/security/secDataPermission.html
+# https://docs.datastax.com/en/dse/6.0/dse-admin/datastax_enterprise/security/secSystemKeyspaces.html
 #
 # Default: false
 system_keyspaces_filtering: false
