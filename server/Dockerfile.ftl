@@ -7,20 +7,11 @@ FROM dse-base as dse-server-base
 ENV DSE_HOME /opt/dse
 ENV DSE_AGENT_HOME /opt/agent
 
-RUN set -x \
-# Add DSE user
-    && groupadd -r dse --gid=999 \
-    && useradd -m -d "$DSE_HOME" -r -g dse --uid=999 dse
+# Add DSE user, changed from 999 as it was already present in base
+RUN groupadd -r dse --gid=1025 && useradd -m -d "$DSE_HOME" -r -g dse --uid=1025 dse
 
 # Install missing packages
-RUN set -x \
-    && apt-get update -qq \
-    && apt-get install -y python adduser lsb-base procps gzip zlib1g wget debianutils libaio1 sudo \
-    && apt-get remove -y python3 \
-    && apt-get autoremove --yes \
-    && apt-get clean all \
-    && rm -rf /var/lib/{apt,dpkg,cache,log}/
-
+RUN microdnf install python procps-ng gzip zlib libaio tar hostname wget which findutils && microdnf clean all
 
 FROM dse-server-base as base
 
