@@ -1,0 +1,53 @@
+<!--
+  ~ Copyright DataStax, Inc.
+  ~
+  ~ Please see the included license file for details.
+  -->
+
+<configuration scan="true">
+
+    <if condition='isDefined("dse.console.useColors")'>
+        <then>
+            <appender name="STDERR" class="ch.qos.logback.core.ConsoleAppender">
+                <withJansi>true</withJansi>
+                <target>System.err</target>
+                <encoder>
+                    <pattern>%highlight(%-5level) %green(%date{ISO8601}) %c: %msg%n</pattern>
+                </encoder>
+            </appender>
+        </then>
+    </if>
+    <if condition='isNull("dse.console.useColors")'>
+        <then>
+            <appender name="STDERR" class="ch.qos.logback.core.ConsoleAppender">
+                <target>System.err</target>
+                <encoder>
+                    <pattern>%-5level %date{ISO8601} %c: %msg%n</pattern>
+                </encoder>
+            </appender>
+        </then>
+    </if>
+
+    <root level="WARN">
+        <appender-ref ref="STDERR" />
+    </root>
+
+    <logger name="org.eclipse.jetty" level="ERROR"/>
+    <logger name="com.datastax.driver.core.CodecRegistry" level="ERROR"/>
+    <logger name="org.apache.hadoop.hive.metastore.ObjectStore" level="ERROR"/>
+    <logger name="org.apache.hadoop.util.NativeCodeLoader" level="ERROR"/>
+
+    <!-- Settings to quiet third party logs that are too verbose -->
+    <logger name="org.apache.spark.util.logging.FileAppender" level="OFF"/>
+    <logger name="org.spark_project.jetty" level="WARN"/>
+    <logger name="org.spark_project.jetty.util.component.AbstractLifeCycle" level="ERROR"/>
+    <logger name="org.apache.spark.repl.SparkIMain$exprTyper" level="INFO"/>
+    <logger name="org.apache.spark.repl.SparkILoop$SparkILoopInterpreter" level="INFO"/>
+    <logger name="org.apache.parquet" level="ERROR"/>
+    <logger name="parquet" level="ERROR"/>
+
+    <!-- SPARK-9183: Settings to avoid annoying messages when looking up
+        nonexistent UDFs in SparkSQL with Hive support -->
+    <logger name="org.apache.hadoop.hive.metastore.RetryingHMSHandler" level="FATAL"/>
+    <logger name="org.apache.hadoop.hive.ql.exec.FunctionRegistry" level="ERROR"/>
+</configuration>

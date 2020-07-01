@@ -1,0 +1,34 @@
+<!--
+  ~ Copyright DataStax, Inc.
+  ~
+  ~ Please see the included license file for details.
+  -->
+<included>
+
+  <appender name="GremlinServerFileAppender" class="ch.qos.logback.core.rolling.RollingFileAppender">
+    <filter class="ch.qos.logback.core.filter.EvaluatorFilter">
+      <evaluator>
+        <expression>
+          if (mdc == null) return false;
+          String service = (String) mdc.get("service");
+          return service != null &amp;&amp; service.equals("GREMLIN");
+        </expression>
+      </evaluator>
+      <onMismatch>DENY</onMismatch>
+    </filter>
+    <file>${GREMLIN_LOG_DIR}/gremlin.log</file>
+    <rollingPolicy class="ch.qos.logback.core.rolling.FixedWindowRollingPolicy">
+      <fileNamePattern>gremlin.%i.zip</fileNamePattern>
+      <minIndex>1</minIndex>
+      <maxIndex>20</maxIndex>
+    </rollingPolicy>
+
+    <triggeringPolicy class="ch.qos.logback.core.rolling.SizeBasedTriggeringPolicy">
+      <maxFileSize>20MB</maxFileSize>
+    </triggeringPolicy>
+    <encoder>
+      <pattern>%-5level %date{ISO8601} %F:%L - %msg%n</pattern>
+    </encoder>
+  </appender>
+
+</included>

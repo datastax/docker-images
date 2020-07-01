@@ -67,3 +67,11 @@ resources/spark/conf/docker.properties.template
 <#if version.major == 5>
 ../agent/conf/datastax-agent-env.sh
 </#if>
+resources/dse/collectd/etc/collectd/10-write-prom.conf
+resources/dse/collectd/etc/collectd/10-statsd.conf
+resources/dse/collectd/etc/collectd/10-write-graphite.conf
+<#if version.greaterEqualThan('6.8.0')>
+resources/cassandra/conf/jvm8-server.options
+resources/cassandra/conf/jvm-server.options
+resources/cassandra/conf/jvm11-server.options
+</#if>

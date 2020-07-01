@@ -1,0 +1,74 @@
+<!--
+  ~ Copyright DataStax, Inc.
+  ~
+  ~ Please see the included license file for details.
+  -->
+<included>
+
+    <appender name="SparkMasterFileAppender" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <filter class="ch.qos.logback.core.filter.EvaluatorFilter">
+            <evaluator>
+                <expression>
+                    if (mdc == null) return false;
+                    String service = (String) mdc.get("service");
+                    return service != null &amp;&amp; service.equals("SPARK-MASTER");
+                </expression>
+            </evaluator>
+            <onMismatch>DENY</onMismatch>
+        </filter>
+        <file>${SPARK_MASTER_LOG_DIR}/master.log</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.FixedWindowRollingPolicy">
+            <fileNamePattern>${SPARK_MASTER_LOG_DIR}/master.%i.zip</fileNamePattern>
+            <minIndex>1</minIndex>
+            <maxIndex>20</maxIndex>
+        </rollingPolicy>
+
+        <triggeringPolicy class="ch.qos.logback.core.rolling.SizeBasedTriggeringPolicy">
+            <maxFileSize>20MB</maxFileSize>
+        </triggeringPolicy>
+        <encoder>
+            <pattern>%-5level %date{ISO8601} %F:%L - %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <appender name="SparkWorkerFileAppender" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <filter class="ch.qos.logback.core.filter.EvaluatorFilter">
+            <evaluator>
+                <expression>
+                    if (mdc == null) return false;
+                    String service = (String) mdc.get("service");
+                    return service != null &amp;&amp; service.equals("SPARK-WORKER");
+                </expression>
+            </evaluator>
+            <onMismatch>DENY</onMismatch>
+        </filter>
+        <file>${SPARK_WORKER_LOG_DIR}/worker.log</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.FixedWindowRollingPolicy">
+            <fileNamePattern>${SPARK_WORKER_LOG_DIR}/worker.%i.zip</fileNamePattern>
+            <minIndex>1</minIndex>
+            <maxIndex>20</maxIndex>
+        </rollingPolicy>
+
+        <triggeringPolicy class="ch.qos.logback.core.rolling.SizeBasedTriggeringPolicy">
+            <maxFileSize>20MB</maxFileSize>
+        </triggeringPolicy>
+        <encoder>
+            <pattern>%-5level %date{ISO8601} %F:%L - %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <!-- Settings to quiet third party logs that are too verbose -->
+    <logger name="org.apache.spark.util.logging.FileAppender" level="OFF"/>
+    <logger name="org.spark_project.jetty" level="WARN"/>
+    <logger name="org.spark_project.jetty.util.component.AbstractLifeCycle" level="ERROR"/>
+    <logger name="org.apache.spark.repl.SparkIMain$exprTyper" level="INFO"/>
+    <logger name="org.apache.spark.repl.SparkILoop$SparkILoopInterpreter" level="INFO"/>
+    <logger name="org.apache.parquet" level="ERROR"/>
+    <logger name="parquet" level="ERROR"/>
+
+    <!-- SPARK-9183: Settings to avoid annoying messages when looking up
+        nonexistent UDFs in SparkSQL with Hive support -->
+    <logger name="org.apache.hadoop.hive.metastore.RetryingHMSHandler" level="FATAL"/>
+    <logger name="org.apache.hadoop.hive.ql.exec.FunctionRegistry" level="ERROR"/>
+
+</included>

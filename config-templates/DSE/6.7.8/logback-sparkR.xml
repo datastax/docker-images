@@ -1,0 +1,65 @@
+<!--
+  ~ Copyright DataStax, Inc.
+  ~
+  ~ Please see the included license file for details.
+  -->
+
+<configuration scan="true">
+
+    <if condition='isDefined("dse.console.useColors")'>
+        <then>
+            <appender name="STDERR" class="ch.qos.logback.core.ConsoleAppender">
+                <withJansi>true</withJansi>
+                <target>System.err</target>
+                <filter class="com.datastax.bdp.hivemetastore.DBCreationErrorFilter"/>
+                <encoder>
+                    <pattern>%highlight(%-5level) %green(%date{ISO8601}) %c: %msg%nopex%n</pattern>
+                </encoder>
+            </appender>
+        </then>
+    </if>
+    <if condition='isNull("dse.console.useColors")'>
+        <then>
+            <appender name="STDERR" class="ch.qos.logback.core.ConsoleAppender">
+                <target>System.err</target>
+                <filter class="com.datastax.bdp.hivemetastore.DBCreationErrorFilter"/>
+                <encoder>
+                    <pattern>%-5level %date{ISO8601} %c: %msg%nopex%n</pattern>
+                </encoder>
+            </appender>
+        </then>
+    </if>
+
+    <appender name="FILE" class="ch.qos.logback.core.FileAppender">
+        <file>${SPARKR_LOG_FILE}</file>
+        <filter class="com.datastax.bdp.hivemetastore.DBCreationErrorFilter"/>
+        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+            <pattern>
+                %d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n
+            </pattern>
+        </encoder>
+    </appender>
+    <root level="WARN">
+        <appender-ref ref="STDERR" />
+        <appender-ref ref="FILE" />
+    </root>
+
+    <logger name="com.datastax.driver.core.CodecRegistry" level="ERROR"/>
+    <logger name="org.apache.hadoop.hive.metastore.ObjectStore" level="ERROR"/>
+    <logger name="org.eclipse.jetty" level="ERROR"/>
+    <logger name="org.apache.hadoop.util.NativeCodeLoader" level="ERROR"/>
+
+    <!-- Settings to quiet third party logs that are too verbose -->
+    <logger name="org.apache.spark.util.logging.FileAppender" level="OFF"/>
+    <logger name="org.spark_project.jetty" level="WARN"/>
+    <logger name="org.spark_project.jetty.util.component.AbstractLifeCycle" level="ERROR"/>
+    <logger name="org.apache.spark.repl.SparkIMain$exprTyper" level="INFO"/>
+    <logger name="org.apache.spark.repl.SparkILoop$SparkILoopInterpreter" level="INFO"/>
+    <logger name="org.apache.parquet" level="ERROR"/>
+    <logger name="parquet" level="ERROR"/>
+
+    <!-- SPARK-9183: Settings to avoid annoying messages when looking up
+        nonexistent UDFs in SparkSQL with Hive support -->
+    <logger name="org.apache.hadoop.hive.metastore.RetryingHMSHandler" level="FATAL"/>
+    <logger name="org.apache.hadoop.hive.ql.exec.FunctionRegistry" level="ERROR"/>
+</configuration>

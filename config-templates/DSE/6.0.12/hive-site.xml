@@ -1,0 +1,155 @@
+<?xml version="1.0"?>
+<?xml-stylesheet type="text/xsl" href="configuration.xsl"?>
+
+<configuration>
+
+  <!-- Hive Configuration can either be stored in this file or in the hadoop configuration files  -->
+  <!-- that are implied by Hadoop setup variables.                                                -->
+  <!-- Aside from Hadoop setup variables - this file is provided as a convenience so that Hive    -->
+  <!-- users do not have to edit hadoop configuration files (that may be managed as a centralized -->
+  <!-- resource).                                                                                 -->
+
+  <!-- Hive Execution Parameters -->
+  <property>
+    <name>hive.exec.mode.local.auto</name>
+    <value>false</value>
+    <description>Let hive determine whether to run in local mode automatically</description>
+  </property>
+
+  <property>
+    <name>hive.metastore.warehouse.dir</name>
+    <!-- Use dsefs file system, set it to  dsefs://127.0.0.1:5598/user/spark/warehouse -->
+    <value>dsefs:///user/spark/warehouse</value>
+    <description>location of default database for the warehouse</description>
+  </property>
+
+  <property>
+    <name>hive.metastore.rawstore.impl</name>
+    <value>com.datastax.bdp.hadoop.hive.metastore.CassandraHiveMetaStore</value>
+    <description>Use the Apache Cassandra Hive RawStore implementation</description>
+  </property>
+
+  <property>
+    <name>com.datastax.bdp.fs.client.authentication.factory</name>
+    <value>com.datastax.bdp.fs.hadoop.DseRestClientAuthProviderBuilderFactory</value>
+  </property>
+
+  <!-- Set this to true to enable auto-creation of Cassandra keyspaces as Hive Databases -->
+  <property>
+    <name>cassandra.autoCreateHiveSchema</name>
+    <value>true</value>
+  </property>
+
+  <property>
+    <name>spark.enable</name>
+    <value>true</value>
+  </property>
+
+  <property>
+    <name>cassandra.connection.metaStoreColumnFamilyName</name>
+    <value>sparkmetastore</value>
+  </property>
+
+  <property>
+    <name>hive.server2.logging.operation.enabled</name>
+    <value>false</value>
+  </property>
+
+  <property>
+    <name>cassandra.port</name>
+    <value>${cassandra.connection.native.port}</value>
+  </property>
+
+  <!-- The following are the settings to enable ssl.
+       Note When hive.server2.authentication is KERBEROS, SSL encryption does not currently work. -->
+  <!--
+  <property>
+    <name>hive.server2.use.SSL</name>
+    <value>true</value>
+    <description></description>
+  </property>
+
+  <property>
+    <name>hive.server2.keystore.path</name>
+    <value>keystore-file-path</value>
+    <description></description>
+  </property>
+
+  <property>
+    <name>hive.server2.keystore.password</name>
+    <value>keystore-file-password</value>
+    <description></description>
+  </property>
+  -->
+  <!-- End of: configuration for ssl -->
+
+  <!--There are three possible JDBC authentication setups for Spark SQL Thrift Server.-->
+  <!--Uncomment one section at a time to use the selected authentication setup.-->
+
+  <!-- Start of: configuration for not authenticating JDBC users -->
+  <!--
+  <property>
+    <name>hive.server2.enable.doAs</name>
+    <value>false</value>
+  </property>
+
+  <property>
+    <name>hive.server2.authentication</name>
+    <value>NONE</value>
+  </property>
+  -->
+  <!-- End of: configuration for not authenticating JDBC users -->
+
+  <!-- Start of: configuration for authenticating JDBC users with Kerberos -->
+  <!--
+    <property>
+      <name>hive.server2.enable.doAs</name>
+      <value>true</value>
+    </property>
+
+    <property>
+      <name>hive.server2.authentication</name>
+      <value>KERBEROS</value>
+    </property>
+
+    <property>
+      <name>hive.server2.authentication.kerberos.principal</name>
+      <value>hiveserver2/_HOST@EXAMPLE.COM</value>
+    </property>
+
+    <property>
+      <name>hive.server2.authentication.kerberos.keytab</name>
+      <value>/path/to/hiveserver2.keytab</value>
+    </property>
+  -->
+  <!-- End of: configuration for authenticating JDBC users with Kerberos -->
+
+  <!-- Start of: configuration for authenticating JDBC users with plain text password -->
+  <!--
+    <property>
+      <name>hive.server2.enable.doAs</name>
+      <value>true</value>
+    </property>
+
+    <property>
+      <name>hive.server2.authentication</name>
+      <value>CUSTOM</value>
+    </property>
+
+    <property>
+      <name>hive.server2.custom.authentication.class</name>
+      <value>com.datastax.bdp.auth.DseThriftServerPlainTextAuthProvider</value>
+    </property>
+  -->
+  <!-- End of: configuration for authenticating JDBC users with plain text password -->
+
+  <property>
+    <name>hive.server2.transport.mode</name>
+    <value>binary</value>
+  </property>
+
+  <property>
+    <name>spark.hadoop.com.datastax.bdp.fs.client.authentication.factory</name>
+    <value>com.datastax.bdp.fs.hadoop.DseRestClientAuthProviderBuilderFactory</value>
+  </property>
+</configuration>
