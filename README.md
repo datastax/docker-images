@@ -19,14 +19,14 @@ The DataStax base image now uses OpenJDK.  Previously we were building with Orac
 
 # Quick Reference 
 ### Where to get help:
-[DataStax Docker Docs](https://academy.datastax.com/quick-downloads?utm_campaign=Docker_2019&utm_medium=web&utm_source=docker&utm_term=-&utm_content=Web_Academy_Downloads), [DataStax Slack](https://academy.datastax.com/slack), [Github](https://github.com/datastax/docker-images)
+[DataStax Academy](https://academy.datastax.com/?utm_campaign=Docker_2019&utm_medium=web&utm_source=docker&utm_term=-&utm_content=Web_Academy_Downloads), [DataStax Community](https://community.datastax.com/), [Github](https://github.com/datastax/docker-images)
 
-Full documentation and advanced tutorials are located within [DataStax Academy](https://academy.datastax.com/quick-downloads?utm_campaign=Docker_2019&utm_medium=web&utm_source=docker&utm_term=-&utm_content=Web_Academy_Downloads). Docker Compose examples for deploying DataStax Enterprise with [Opscenter](https://hub.docker.com/r/datastax/dse-opscenter/) and [Studio](https://hub.docker.com/r/datastax/dse-studio/) are available on our [Github](https://github.com/datastax/docker-images/tree/master/example_compose_yamls) page 
+Full documentation and advanced tutorials are located within [DataStax Academy](https://academy.datastax.com/?utm_campaign=Docker_2019&utm_medium=web&utm_source=docker&utm_term=-&utm_content=Web_Academy_Downloads). Docker Compose examples for deploying DataStax Enterprise with [Opscenter](https://hub.docker.com/r/datastax/dse-opscenter/) and [Studio](https://hub.docker.com/r/datastax/dse-studio/) are available on our [Github](https://github.com/datastax/docker-images/tree/master/example_compose_yamls) page 
 
 ### Featured Tutorial - [DataStax Enterprise 6 Guided Tour](https://academy.datastax.com/resources/guided-tour-dse-6-using-docker)
 
 ### Where to file issues:
-https://github.com/datastax/docker-images/issues
+Ask questions and get help at the [DataStax Community](https://community.datastax.com/) forum.
 
 ### Maintained by 
 [DataStax](https://www.datastax.com/) 
@@ -353,7 +353,7 @@ Run `./gradlew tasks` to get the list of all available tasks.
 
 # Next Steps
 
-Head over to [DataStax Academy](https://academy.datastax.com/quick-downloads?utm_campaign=Docker_2019&utm_medium=web&utm_source=docker&utm_term=-&utm_content=Web_Academy_Downloads) for advanced documentation including
+Head over to [DataStax Academy](https://academy.datastax.com/?utm_campaign=Docker_2019&utm_medium=web&utm_source=docker&utm_term=-&utm_content=Web_Academy_Downloads) for advanced documentation including
 
 * Apache Cassandra™/Datastax configuration management
 * Using environment variables
